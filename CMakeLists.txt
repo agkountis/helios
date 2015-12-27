@@ -3,7 +3,17 @@ project(helios)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h source/math/vector/vec3.cpp)
-add_executable(helios ${SOURCE_FILES})
+set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h
+        source/math/vector/vec3.cpp source/renderer/renderer.h
+        source/renderer/ray_tracer.h source/renderer/ray_tracer.cpp
+        source/geometry/primitive.h source/material/material.h
+        source/material/material.cpp source/geometry/sphere.h
+        source/geometry/sphere.cpp source/math/ray/ray.h source/math/ray/ray.cpp)
 
 include_directories("source/math/vector")
+include_directories("source/math/ray")
+include_directories("source/renderer")
+include_directories("source/geometry")
+include_directories("source/material")
+
+add_executable(helios ${SOURCE_FILES})
