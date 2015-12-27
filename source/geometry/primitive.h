@@ -1,14 +1,12 @@
 #ifndef HELIOS_PRIMITIVE_H
 #define HELIOS_PRIMITIVE_H
 
-#include <vec3.h>
+#include <ray.h>
 
 class Primitive {
-protected:
-    Vec3 position;
-
 public:
     virtual ~Primitive() = default;
+    virtual bool intersect(const Ray &ray) = 0;
 };
 
 #endif //HELIOS_PRIMITIVE_H

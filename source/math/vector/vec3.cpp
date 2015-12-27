@@ -1,7 +1,8 @@
 #include <math.h>
 #include "vec3.h"
 
-Vec3::Vec3(double x, double y, double z) : x(x), y(y), z(z) { }
+Vec3::Vec3(double x, double y, double z) : x(x), y(y), z(z)
+{ }
 
 double Vec3::dot(const Vec3 &vec)
 {

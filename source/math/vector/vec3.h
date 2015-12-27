@@ -27,7 +27,7 @@ public:
 /**
  * Unary operators
  */
-inline Vec3 operator -(const Vec3 &vec)
+inline Vec3 operator-(const Vec3 &vec)
 {
     return Vec3(-vec.x, -vec.y, -vec.z);
 }
@@ -36,17 +36,17 @@ inline Vec3 operator -(const Vec3 &vec)
 /**
  * Binary operators -- Vector (op) Scalar -- Scalar (op) Vector
  */
-inline Vec3 operator *(const Vec3 &vec, double scalar)
+inline Vec3 operator*(const Vec3 &vec, double scalar)
 {
     return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
 }
 
-inline Vec3 operator *(double scalar, const Vec3 &vec)
+inline Vec3 operator*(double scalar, const Vec3 &vec)
 {
     return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
 }
 
-inline Vec3 operator +(const Vec3 &vec, double scalar)
+inline Vec3 operator+(const Vec3 &vec, double scalar)
 {
     return Vec3(vec.x + scalar, vec.y + scalar, vec.z + scalar);
 }
@@ -55,7 +55,7 @@ inline Vec3 operator +(const Vec3 &vec, double scalar)
 /**
  * Binary operators -- Vector (op) Vector
  */
-inline Vec3 operator +(const Vec3 &vec1, const Vec3 &vec2)
+inline Vec3 operator+(const Vec3 &vec1, const Vec3 &vec2)
 {
     return Vec3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
 }

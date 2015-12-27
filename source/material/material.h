@@ -11,7 +11,9 @@ private:
 
 public:
     const Vec3 &get_color() const;
+
     float get_transparency() const;
+
     float get_reflectivity() const;
 };
 
