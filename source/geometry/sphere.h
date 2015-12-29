@@ -1,7 +1,7 @@
 #ifndef HELIOS_SPHERE_H
 #define HELIOS_SPHERE_H
 
-#include "primitive.h"
+#include "object.h"
 
 class Sphere : public Primitive {
 protected:

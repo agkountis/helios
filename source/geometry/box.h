@@ -1,9 +1,9 @@
 #ifndef HELIOS_BOX_H
 #define HELIOS_BOX_H
 
-#include "primitive.h"
+#include "object.h"
 
-class Box : public Primitive {
+class Box : public Object {
 protected:
     Vec3 position;
     double length;

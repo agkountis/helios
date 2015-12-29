@@ -1,12 +1,12 @@
-#ifndef HELIOS_PRIMITIVE_H
-#define HELIOS_PRIMITIVE_H
+#ifndef HELIOS_OBJECT_H
+#define HELIOS_OBJECT_H
 
 #include <ray.h>
 
-class Primitive {
+class Object {
 public:
     virtual ~Primitive() = default;
     virtual bool intersect(const Ray &ray) = 0;
 };
 
-#endif //HELIOS_PRIMITIVE_H
+#endif //HELIOS_OBJECT_H
