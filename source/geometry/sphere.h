@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-class Sphere : public Primitive {
+class Sphere : public Object {
 protected:
     Vec3 position;
     double radius = 0;
@@ -11,7 +11,8 @@ protected:
 public:
     Sphere() = default;
 
-    Sphere(const Vec3 &position, double radius);
+    Sphere(const Vec3 &position, double radius) : position(position), radius(radius)
+    { };
 
     bool intersect(const Ray &ray);
 };

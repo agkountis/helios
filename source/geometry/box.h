@@ -12,6 +12,7 @@ protected:
 
 public:
     Box() = default;
+
     Box(const Vec3 &position, double length, double width, double height);
 
     bool intersect(const Ray &ray);

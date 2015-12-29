@@ -5,16 +5,16 @@
 #include <mat4.h>
 
 class Ray {
-private:
+public:
     Vec3 origin;
     Vec3 direction;
 
-public:
     Ray() = default;
 
-    Ray(const Vec3 &origin, const Vec3 &direction);
+    Ray(const Vec3 &origin, const Vec3 &direction) : origin(origin), direction(direction)
+    { };
 
-    Ray &transform(const Mat4 &matrix);
+    void transform(const Mat4 &matrix);
 };
 
 #endif //HELIOS_RAY_H

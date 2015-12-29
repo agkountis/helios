@@ -1,8 +1,6 @@
 #ifndef HELIOS_RENDERER_H
 #define HELIOS_RENDERER_H
 
-#include <iostream>
-
 class Renderer {
 public:
     virtual ~Renderer() = default;

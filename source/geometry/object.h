@@ -5,7 +5,8 @@
 
 class Object {
 public:
-    virtual ~Primitive() = default;
+    virtual ~Object() = default;
+
     virtual bool intersect(const Ray &ray) = 0;
 };
 

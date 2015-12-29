@@ -4,17 +4,18 @@
 #include <vec3.h>
 
 class Material {
-private:
-    Vec3 color;
-    float transparency = 0;
-    float reflectivity = 0;
-
 public:
-    const Vec3 &get_color() const;
+    Vec3 color;
+    float transparency = 0.0;
+    float reflectivity = 0.0;
+    float emissivity = 0.0;
+    float transmittance = 0.0;
 
-    float get_transparency() const;
+    Material() = default;
 
-    float get_reflectivity() const;
+    Material(const Vec3 &color, float transparency, float reflectivity, float emissivity, float transmittance)
+            : color(color), transparency(transparency), reflectivity(reflectivity), emissivity(emissivity), transmittance(transmittance)
+    { };
 };
 
 #endif //HELIOS_MATERIAL_H
