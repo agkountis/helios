@@ -22,6 +22,68 @@ public:
     void scale(const Vec3 &scale);
 
     void set_identity();
+
+    inline double *operator[](unsigned int i) { return matrix[i]; }
+
+    friend Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2);
 };
+
+inline Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2)
+{
+    Mat4 res;
+
+    res.matrix[0][0] = mat1.matrix[0][0] * mat2.matrix[0][0] + mat1.matrix[0][1] * mat2.matrix[1][0]
+                       + mat1.matrix[0][2] * mat2.matrix[2][0] + mat1.matrix[0][3] * mat2.matrix[3][0];
+
+    res.matrix[0][1] = mat1.matrix[0][0] * mat2.matrix[0][1] + mat1.matrix[0][1] * mat2.matrix[1][1]
+                       + mat1.matrix[0][2] * mat2.matrix[2][1] + mat1.matrix[0][3] * mat2.matrix[3][1];
+
+    res.matrix[0][2] = mat1.matrix[0][0] * mat2.matrix[0][2] + mat1.matrix[0][1] * mat2.matrix[1][2]
+                       + mat1.matrix[0][2] * mat2.matrix[2][2] + mat1.matrix[0][3] * mat2.matrix[3][2];
+
+    res.matrix[0][3] = mat1.matrix[0][0] * mat2.matrix[0][3] + mat1.matrix[0][1] * mat2.matrix[1][3]
+                       + mat1.matrix[0][2] * mat2.matrix[2][3] + mat1.matrix[0][3] * mat2.matrix[3][3];
+
+
+    res.matrix[1][0] = mat1.matrix[1][0] * mat2.matrix[0][0] + mat1.matrix[1][1] * mat2.matrix[1][0]
+                       + mat1.matrix[1][2] * mat2.matrix[2][0] + mat1.matrix[1][3] * mat2.matrix[3][0];
+
+    res.matrix[1][1] = mat1.matrix[1][0] * mat2.matrix[0][1] + mat1.matrix[1][1] * mat2.matrix[1][1]
+                       + mat1.matrix[1][2] * mat2.matrix[2][1] + mat1.matrix[1][3] * mat2.matrix[3][1];
+
+    res.matrix[1][2] = mat1.matrix[1][0] * mat2.matrix[0][2] + mat1.matrix[1][1] * mat2.matrix[1][2]
+                       + mat1.matrix[1][2] * mat2.matrix[2][2] + mat1.matrix[1][3] * mat2.matrix[3][2];
+
+    res.matrix[1][3] = mat1.matrix[1][0] * mat2.matrix[0][3] + mat1.matrix[1][1] * mat2.matrix[1][3]
+                       + mat1.matrix[1][2] * mat2.matrix[2][3] + mat1.matrix[1][3] * mat2.matrix[3][3];
+
+
+    res.matrix[2][0] = mat1.matrix[2][0] * mat2.matrix[0][0] + mat1.matrix[2][1] * mat2.matrix[1][0]
+                       + mat1.matrix[2][2] * mat2.matrix[2][0] + mat1.matrix[2][3] * mat2.matrix[3][0];
+
+    res.matrix[2][1] = mat1.matrix[2][0] * mat2.matrix[0][1] + mat1.matrix[2][1] * mat2.matrix[1][1]
+                       + mat1.matrix[2][2] * mat2.matrix[2][1] + mat1.matrix[2][3] * mat2.matrix[3][1];
+
+    res.matrix[2][2] = mat1.matrix[2][0] * mat2.matrix[0][2] + mat1.matrix[2][1] * mat2.matrix[1][2]
+                       + mat1.matrix[2][2] * mat2.matrix[2][2] + mat1.matrix[2][3] * mat2.matrix[3][2];
+
+    res.matrix[2][3] = mat1.matrix[2][0] * mat2.matrix[0][3] + mat1.matrix[2][1] * mat2.matrix[1][3]
+                       + mat1.matrix[2][2] * mat2.matrix[2][3] + mat1.matrix[2][3] * mat2.matrix[3][3];
+
+
+    res.matrix[3][0] = mat1.matrix[3][0] * mat2.matrix[0][0] + mat1.matrix[3][1] * mat2.matrix[1][0]
+                       + mat1.matrix[3][2] * mat2.matrix[2][0] + mat1.matrix[3][3] * mat2.matrix[3][0];
+
+    res.matrix[3][1] = mat1.matrix[3][0] * mat2.matrix[0][1] + mat1.matrix[3][1] * mat2.matrix[1][1]
+                       + mat1.matrix[3][2] * mat2.matrix[2][1] + mat1.matrix[3][3] * mat2.matrix[3][1];
+
+    res.matrix[3][2] = mat1.matrix[3][0] * mat2.matrix[0][2] + mat1.matrix[3][1] * mat2.matrix[1][2]
+                       + mat1.matrix[3][2] * mat2.matrix[2][2] + mat1.matrix[3][3] * mat2.matrix[3][2];
+
+    res.matrix[3][3] = mat1.matrix[3][0] * mat2.matrix[0][3] + mat1.matrix[3][1] * mat2.matrix[1][3]
+                       + mat1.matrix[3][2] * mat2.matrix[2][3] + mat1.matrix[3][3] * mat2.matrix[3][3];
+
+    return res;
+}
 
 #endif //HELIOS_MAT4_H
