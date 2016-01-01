@@ -11,8 +11,6 @@ public:
 
     Vec3(double x, double y, double z);
 
-    double dot(const Vec3 &vec);
-
     Vec3 cross(const Vec3 &vec);
 
     double length();
@@ -23,6 +21,11 @@ public:
 
     Vec3 normalized();
 };
+
+inline double dot(const Vec3 &vec1, const Vec3 &vec2)
+{
+    return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+}
 
 /**
  * Unary operators
@@ -58,6 +61,11 @@ inline Vec3 operator+(const Vec3 &vec, double scalar)
 inline Vec3 operator+(const Vec3 &vec1, const Vec3 &vec2)
 {
     return Vec3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
+}
+
+inline Vec3 operator-(const Vec3 & vec1, const Vec3 &vec2)
+{
+    return Vec3(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
 }
 
 #endif //HELIOS_VEC3_H

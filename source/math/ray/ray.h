@@ -4,6 +4,11 @@
 #include <vec3.h>
 #include <mat4.h>
 
+struct HitPoint {
+    Vec3 position;
+    Vec3 normal;
+};
+
 class Ray {
 public:
     Vec3 origin;

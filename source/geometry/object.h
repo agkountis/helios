@@ -7,7 +7,7 @@ class Object {
 public:
     virtual ~Object() = default;
 
-    virtual bool intersect(const Ray &ray) = 0;
+    virtual bool intersect(const Ray &ray, HitPoint *hit_point) = 0;
 };
 
 #endif //HELIOS_OBJECT_H

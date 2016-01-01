@@ -4,3 +4,8 @@ void RayTracer::render()
 {
 
 }
+
+void RayTracer::shade()
+{
+
+}
