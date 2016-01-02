@@ -11,8 +11,6 @@ public:
 
     Vec3(double x, double y, double z);
 
-    Vec3 cross(const Vec3 &vec);
-
     double length();
 
     double length_squared();
@@ -25,6 +23,11 @@ public:
 inline double dot(const Vec3 &vec1, const Vec3 &vec2)
 {
     return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+}
+
+inline Vec3 cross(const Vec3 &vec1, const Vec3 &vec2)
+{
+    return Vec3(vec1.y * vec2.z - vec1.z * vec2.y, vec1.z * vec2.x - vec1.x * vec2.z, vec1.x * vec2.y - vec1.y * vec2.z);
 }
 
 /**
@@ -47,6 +50,16 @@ inline Vec3 operator*(const Vec3 &vec, double scalar)
 inline Vec3 operator*(double scalar, const Vec3 &vec)
 {
     return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
+}
+
+inline Vec3 operator/(const Vec3 &vec, double scalar)
+{
+    return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
+}
+
+inline Vec3 operator/(double scalar, const Vec3 &vec)
+{
+    return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
 }
 
 inline Vec3 operator+(const Vec3 &vec, double scalar)

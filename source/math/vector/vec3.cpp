@@ -4,11 +4,6 @@
 Vec3::Vec3(double x, double y, double z) : x(x), y(y), z(z)
 { }
 
-Vec3 Vec3::cross(const Vec3 &vec)
-{
-    return Vec3(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.z);
-}
-
 double Vec3::length()
 {
     return sqrt(x * x + y * y + z * z);

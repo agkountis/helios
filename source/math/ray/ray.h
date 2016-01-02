@@ -4,9 +4,13 @@
 #include <vec3.h>
 #include <mat4.h>
 
+class Object;
+
 struct HitPoint {
+    Object *object = nullptr;
     Vec3 position;
     Vec3 normal;
+    double distance = 0.0;
 };
 
 class Ray {
