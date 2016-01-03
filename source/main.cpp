@@ -1,19 +1,17 @@
 #include <mat4.h>
 #include <stdio.h>
 #include <iostream>
+#include <image.h>
 
 int main(int argc, char **argv)
 {
 
-    Mat4 mat;
-    Mat4 mat2;
+    Image image(10, 10);
 
-    mat.scale(Vec3(2.0, 2.0, 2.0));
-    mat.translate(Vec3(3.0, 3.0, 3.0));
-    mat2.scale(Vec3(3.0, 3.0, 3.0));
+    if(!image.save_as_ppm("test.ppm")) {
+        std::cerr << "Failed to write to file" << std::endl;
+        exit(1);
+    }
 
-    Mat4 res = mat * mat2;
-
-    std::cout << mat[3][3] << std::endl;
     return 0;
 }

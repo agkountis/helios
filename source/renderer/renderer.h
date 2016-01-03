@@ -10,6 +10,8 @@ class Renderer {
 protected:
     virtual void shade() = 0;
 
+    virtual void trace_ray(const Ray &ray) = 0;
+
 public:
     virtual ~Renderer() = default;
 

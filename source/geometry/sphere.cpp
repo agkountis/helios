@@ -1,7 +1,7 @@
 #include "sphere.h"
 #include <math.h>
 
-bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
+bool Sphere::intersect(const Ray &ray, unique_ptr<HitPoint> hit_point)
 {
     /**
      * sphere vector equation is |x - center| = radius
