@@ -17,7 +17,7 @@ public:
 
     virtual ~Image() {};
 
-    virtual bool save(std::string file_name) = 0;
+    virtual bool save(const std::string &file_name) = 0;
 };
 
 #endif //HELIOS_IMAGE_H

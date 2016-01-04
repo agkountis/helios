@@ -5,14 +5,14 @@
 
 class PpmImage : public Image {
 private:
-    unsigned int max_color_value;
+    static const int max_color_value = 255;
 
 public:
-    PpmImage(unsigned int width, unsigned int height, unsigned int max_color_value)
-            : Image(width, height), max_color_value(max_color_value)
+    PpmImage(unsigned int width, unsigned int height)
+            : Image(width, height)
     { }
 
-    bool save(std::string file_name);
+    bool save(const std::string &file_name);
 };
 
 #endif //HELIOS_PPM_IMAGE_H

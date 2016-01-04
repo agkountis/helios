@@ -3,7 +3,7 @@
 #include "ppm_image.h"
 
 
-bool PpmImage::save(std::string file_name)
+bool PpmImage::save(const std::string &file_name)
 {
 
     std::ofstream file(file_name, std::ios::binary | std::ios::out);
@@ -16,9 +16,9 @@ bool PpmImage::save(std::string file_name)
     /**
      * Write the .ppm file header.
      */
-    file << "P6\n";
-    file << width << " " << height << "\n";
-    file << max_color_value << "\n";
+    file << "P6" << std::endl;
+    file << width << " " << height << std::endl;
+    file << max_color_value << std::endl;
 
     long total_pixels = width * height * 3;
 
