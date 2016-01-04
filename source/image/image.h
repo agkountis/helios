@@ -1,20 +1,23 @@
 #ifndef HELIOS_IMAGE_H
 #define HELIOS_IMAGE_H
 
+#include <string>
 #include <vector>
 
 class Image {
-private:
-    unsigned long width = 0;
-    unsigned long height = 0;
+protected:
+    unsigned int width;
+    unsigned int height;
 
-    std::vector<unsigned char> pixels;
+    char *pixels = nullptr;
 
 public:
-    Image(unsigned long width, unsigned long height) : width(width), height(height)
+    Image(unsigned int width, unsigned int height) : width(width), height(height)
     { }
 
-    bool save_as_ppm(std::string file_name);
+    virtual ~Image() {};
+
+    virtual bool save(std::string file_name) = 0;
 };
 
 #endif //HELIOS_IMAGE_H
