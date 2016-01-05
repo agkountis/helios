@@ -62,6 +62,11 @@ bool Image::save_auto_detect(const std::string &file_name)
 }
 
 
+const std::string &Image::extract_file_extension(const std::string &file_name)
+{
+
+}
+
 void Image::tone_map()
 {
 

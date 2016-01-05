@@ -15,6 +15,8 @@ private:
 
     bool save_auto_detect(const std::string &file_name);
 
+    const std::string &extract_file_extension(const std::string &file_name);
+
     void tone_map();
 
 public:
