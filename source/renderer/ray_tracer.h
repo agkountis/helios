@@ -2,27 +2,32 @@
 #define HELIOS_RAY_TRACER_H
 
 #include <scene.h>
+#include <image.h>
 #include "renderer.h"
 
 class RayTracer : public Renderer {
 protected:
-    ImageSize image_size;
-
     const Scene *scene = nullptr;
+
+    Image image;
 
     void shade();
 
-    void trace_ray(const Ray &ray);
+    Vec3 trace_ray(const Ray &ray);
+
+    void find_intersection(const Ray &ray, HitPoint *hit_point);
 
 public:
-    RayTracer(const Scene *scene, const ImageSize &image_size) : scene(scene), image_size(image_size)
+    RayTracer() = default;
+
+    RayTracer(const Scene *scene, const Image &image) : scene(scene), image(image)
     { }
 
     ~RayTracer();
 
     void set_scene(const Scene *scene);
 
-    void set_image_size(const ImageSize &image_size);
+    void set_image(const Image &image);
 
     void render();
 };
