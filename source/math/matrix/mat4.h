@@ -23,7 +23,14 @@ public:
 
     void set_identity();
 
-    inline double *operator[](unsigned int i) { return matrix[i]; }
+    Mat4 inverse() const;
+
+    double determinant() const;
+
+    Mat4 adjoint() const;
+
+    inline double *operator[](unsigned int i)
+    { return matrix[i]; }
 
     friend Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2);
 };

@@ -11,7 +11,7 @@ Object *Scene::get_object(unsigned int idx) const
     return objects[idx];
 }
 
-const std::vector<Object*> &Scene::get_objects() const
+const std::vector<Object *> &Scene::get_objects() const
 {
     return objects;
 }

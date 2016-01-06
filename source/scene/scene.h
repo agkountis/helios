@@ -7,14 +7,14 @@
 
 class Scene {
 private:
-    std::vector<Object*> objects;
+    std::vector<Object *> objects;
 
 public:
     void add_object(Object *object);
 
     Object *get_object(unsigned int idx) const;
 
-    const std::vector<Object*> &get_objects() const;
+    const std::vector<Object *> &get_objects() const;
 
     bool load(std::string path);
 };

@@ -32,9 +32,27 @@ void Mat4::scale(const Vec3 &scale)
 
 void Mat4::set_identity()
 {
-    for(int i = 0 ; i < 4 ; i++) {
-        for(int j = 0 ; j < 4 ; j++) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
             i == j ? matrix[i][j] = 1.0 : matrix[i][j] = 0.0;
         }
     }
+}
+
+
+Mat4 Mat4::inverse() const
+{
+    //TODO: Implement this.
+}
+
+double Mat4::determinant() const
+{
+    //TODO: Implement this.
+    return 0;
+}
+
+Mat4 Mat4::adjoint() const
+{
+    //TODO: Implement this.
+    return Mat4();
 }

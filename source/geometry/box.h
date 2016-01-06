@@ -5,7 +5,6 @@
 
 class Box : public Object {
 protected:
-    Vec3 position;
     double length;
     double width;
     double height;

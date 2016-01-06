@@ -10,7 +10,7 @@ set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h
         source/geometry/sphere.h source/geometry/sphere.cpp source/math/ray/ray.h
         source/math/ray/ray.cpp source/geometry/box.h source/geometry/box.cpp source/math/matrix/mat4.h
         source/math/matrix/mat4.cpp source/scene/scene.h source/scene/scene.cpp source/image/image.h
-        source/image/image.cpp)
+        source/image/image.cpp source/camera/camera.h source/camera/camera.cpp)
 
 include_directories("source/math/vector")
 include_directories("source/math/ray")
@@ -20,5 +20,6 @@ include_directories("source/geometry")
 include_directories("source/material")
 include_directories("source/scene")
 include_directories("source/image")
+include_directories("source/camera")
 
 add_executable(helios ${SOURCE_FILES})

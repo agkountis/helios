@@ -18,7 +18,7 @@ void RayTracer::set_scene(const Scene *scene)
 
 void RayTracer::render()
 {
-    if(!scene) {
+    if (!scene) {
         std::cerr << "RayTracer ERROR: Scene pointer is null." << std::endl;
         exit(1);
     }
@@ -26,9 +26,10 @@ void RayTracer::render()
     /**
      * Work with scan-lines for now.
      */
-    for(int height = 0 ; height < image.get_height() ; height++) {
-        for(int width = 0 ; width < image.get_width() ; width++) {
+    for (int height = 0; height < image.get_height(); height++) {
+        for (int width = 0; width < image.get_width(); width++) {
             //TODO: Create a primary ray. Trace it and get the final color.
+
         }
     }
 }

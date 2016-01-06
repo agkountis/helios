@@ -14,7 +14,8 @@ public:
     Material() = default;
 
     Material(const Vec3 &color, float transparency, float reflectivity, float emissivity, float transmittance)
-            : color(color), transparency(transparency), reflectivity(reflectivity), emissivity(emissivity), transmittance(transmittance)
+            : color(color), transparency(transparency), reflectivity(reflectivity), emissivity(emissivity),
+              transmittance(transmittance)
     { };
 };
 
