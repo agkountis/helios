@@ -34,6 +34,8 @@ int main(int argc, char **argv)
     mat[3][2] = 1;
     mat[3][3] = 4;
 
+    mat.transpose();
+
     mat.adjoint();
 
     return 0;

@@ -39,16 +39,34 @@ void Mat4::set_identity()
     }
 }
 
-
-Mat4 Mat4::inverse() const
-{
-    //TODO: Implement this.
-}
-
 double Mat4::determinant() const
 {
     //TODO: Implement this.
     return 0;
+}
+
+
+void Mat4::transpose()
+{
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            double original_value = matrix[i][j];
+            matrix[i][j] = matrix[j][i];
+            matrix[j][i] = original_value;
+        }
+    }
+}
+
+Mat4 Mat4::transposed()
+{
+//    Mat4 mat;
+//
+//    for (int i = 0; i < 4; i++) {
+//        for (int j = 0; j < 4; j++) {
+//            mat[i][j]
+//        }
+//    }
+    return Mat4();
 }
 
 Mat4 Mat4::adjoint() const
@@ -130,4 +148,9 @@ Mat4 Mat4::adjoint() const
 
     //TODO: Return the transposed coefficient matrix.
     return Mat4();
+}
+
+Mat4 Mat4::inverse() const
+{
+    //TODO: Implement this.
 }
