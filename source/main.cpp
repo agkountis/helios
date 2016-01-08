@@ -24,7 +24,6 @@ int main(int argc, char **argv)
     mat[3][2] = 1;
     mat[3][3] = 4;
 
-    //mat.transpose();
     Mat4 inv = mat.inverse();
 
     Mat4 res = inv * mat;

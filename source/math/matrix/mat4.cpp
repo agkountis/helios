@@ -183,11 +183,5 @@ Mat4 Mat4::inverse() const
 {
     Mat4 adj = adjoint();
 
-    double det = determinant();
-
-    double one_over_det = 1.0 / det;
-
-    Mat4 res = adj * one_over_det;
-
-    return res;
+    return adj * (1.0 / determinant());
 }
