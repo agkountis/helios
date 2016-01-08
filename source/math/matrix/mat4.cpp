@@ -1,5 +1,3 @@
-#include <ostream>
-#include <iostream>
 #include "mat4.h"
 
 void Mat4::translate(double x, double y, double z)
@@ -53,6 +51,7 @@ void Mat4::transpose()
     int column_offset = 1;
 
     for (int i = 0; i < 3; i++) {
+
         for (int j = 0; j < 4 - column_offset; j++) {
             double tmp = matrix[i][j + column_offset];
             matrix[i][j + column_offset] = matrix[j + column_offset][i];
