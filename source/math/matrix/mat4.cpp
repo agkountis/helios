@@ -1,3 +1,5 @@
+#include <ostream>
+#include <iostream>
 #include "mat4.h"
 
 void Mat4::translate(double x, double y, double z)
@@ -48,25 +50,25 @@ double Mat4::determinant() const
 
 void Mat4::transpose()
 {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            double original_value = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = original_value;
+    int column_offset = 1;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4 - column_offset; j++) {
+            double tmp = matrix[i][j + column_offset];
+            matrix[i][j + column_offset] = matrix[j + column_offset][i];
+            matrix[j + column_offset][i] = tmp;
         }
+
+        column_offset++;
     }
 }
 
 Mat4 Mat4::transposed()
 {
-//    Mat4 mat;
-//
-//    for (int i = 0; i < 4; i++) {
-//        for (int j = 0; j < 4; j++) {
-//            mat[i][j]
-//        }
-//    }
-    return Mat4();
+    Mat4 mat = *this;
+    mat.transpose();
+
+    return mat;
 }
 
 Mat4 Mat4::adjoint() const
