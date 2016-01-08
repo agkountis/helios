@@ -41,8 +41,23 @@ void Mat4::set_identity()
 
 double Mat4::determinant() const
 {
-    //TODO: Implement this.
-    return 0;
+    double det11 = matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
+                   matrix[1][2] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) +
+                   matrix[1][3] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]);
+
+    double det12 = matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
+                   matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
+                   matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]);
+
+    double det13 = matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) -
+                   matrix[1][1] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
+                   matrix[1][3] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
+
+    double det14 = matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]) -
+                   matrix[1][1] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]) +
+                   matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
+
+    return matrix[0][0] * det11 - matrix[0][1] * det12 + matrix[0][2] * det13 - matrix[0][3] * det14;
 }
 
 
@@ -65,6 +80,7 @@ void Mat4::transpose()
 Mat4 Mat4::transposed()
 {
     Mat4 mat = *this;
+
     mat.transpose();
 
     return mat;
@@ -147,11 +163,31 @@ Mat4 Mat4::adjoint() const
                         matrix[0][2] * (matrix[2][1] * matrix[1][0] - matrix[1][1] * matrix[2][0]);
     /* ------------------------------------------------------------------------------------------------- */
 
-    //TODO: Return the transposed coefficient matrix.
-    return Mat4();
+    coefficient.transpose();
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+
+            if (i % 2)
+                coefficient[i][j] = -coefficient[i][j];
+
+            if (j % 2)
+                coefficient[i][j] = -coefficient[i][j];
+        }
+    }
+
+    return coefficient;
 }
 
 Mat4 Mat4::inverse() const
 {
-    //TODO: Implement this.
+    Mat4 adj = adjoint();
+
+    double det = determinant();
+
+    double one_over_det = 1.0 / det;
+
+    Mat4 res = adj * one_over_det;
+
+    return res;
 }

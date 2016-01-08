@@ -1,17 +1,7 @@
-#include <iostream>
-#include <image.h>
 #include <ray_tracer.h>
 
 int main(int argc, char **argv)
 {
-
-//    Image image(1024, 1024);
-//    Scene *sc = new Scene;
-//
-//    Renderer *renderer = new RayTracer(sc, image);
-//
-//    renderer->render();
-
     Mat4 mat;
 
     mat[0][0] = 1;
@@ -34,9 +24,10 @@ int main(int argc, char **argv)
     mat[3][2] = 1;
     mat[3][3] = 4;
 
-    mat.transpose();
+    //mat.transpose();
+    Mat4 inv = mat.inverse();
 
-    mat.adjoint();
+    Mat4 res = inv * mat;
 
     return 0;
 }

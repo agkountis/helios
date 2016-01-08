@@ -38,6 +38,8 @@ public:
 
     friend Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2);
 
+    friend Mat4 operator*(Mat4 &mat, double scalar);
+
     inline void operator=(const Mat4 &mat2)
     {
         matrix[0][0] = mat2.matrix[0][0];
@@ -116,6 +118,18 @@ inline Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2)
 
     res.matrix[3][3] = mat1.matrix[3][0] * mat2.matrix[0][3] + mat1.matrix[3][1] * mat2.matrix[1][3]
                        + mat1.matrix[3][2] * mat2.matrix[2][3] + mat1.matrix[3][3] * mat2.matrix[3][3];
+
+    return res;
+}
+
+inline Mat4 operator*(Mat4 &mat, double scalar)
+{
+    Mat4 res;
+    for (int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            res[i][j] = mat.matrix[i][j] * scalar;
+        }
+    }
 
     return res;
 }
