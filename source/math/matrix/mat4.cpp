@@ -1,5 +1,31 @@
 #include "mat4.h"
 
+
+Mat4::Mat4(const Mat4 &mat)
+{
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            matrix[i][j] = mat.matrix[i][j];
+        }
+    }
+}
+
+void Mat4::set_row_vector(double x, double y, double z, double w, unsigned int row_idx)
+{
+    matrix[row_idx][0] = x;
+    matrix[row_idx][1] = y;
+    matrix[row_idx][2] = z;
+    matrix[row_idx][3] = w;
+}
+
+void Mat4::set_column_vector(double x, double y, double z, double w, unsigned int column_idx)
+{
+    matrix[0][column_idx] = x;
+    matrix[1][column_idx] = y;
+    matrix[2][column_idx] = z;
+    matrix[3][column_idx] = w;
+}
+
 void Mat4::translate(double x, double y, double z)
 {
     matrix[0][3] += x;
@@ -77,7 +103,7 @@ void Mat4::transpose()
     }
 }
 
-Mat4 Mat4::transposed()
+Mat4 Mat4::transposed() const
 {
     Mat4 mat = *this;
 

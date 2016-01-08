@@ -13,6 +13,12 @@ private:
 public:
     Mat4() = default;
 
+    Mat4(const Mat4 &mat);
+
+    void set_row_vector(double x, double y, double z, double w, unsigned int row_idx);
+
+    void set_column_vector(double x, double y, double z, double w, unsigned int column_idx);
+
     void translate(double x, double y, double z);
 
     void translate(const Vec3 &position);
@@ -27,7 +33,7 @@ public:
 
     void transpose();
 
-    Mat4 transposed();
+    Mat4 transposed() const;
 
     Mat4 adjoint() const;
 
