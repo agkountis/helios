@@ -1,23 +1,29 @@
+#include <math.h>
 #include "camera.h"
 
 
-void Camera::set_position(const Vec3 &position)
+void Camera::set_target(const Vec3 &target)
 {
-    this->position = position;
+    this->target = target;
 }
 
-const Vec3 &Camera::get_position() const
+const Vec3 &Camera::get_target() const
 {
-    return position;
+    return target;
 }
 
-
-void Camera::set_transformation(const Mat4 &transformation)
+void Camera::set_fov(float fov, CameraFovType fov_type)
 {
-    this->transformation = transformation;
+    switch (fov_type) {
+        case CAM_FOV_RADIANS:
+            this->fov = fov;
+            break;
+        case CAM_FOV_DEGREES:
+            this->fov = (float)M_PI * fov / 180.0f;
+    }
 }
 
-const Mat4 &Camera::get_transformation() const
+float Camera::get_fov() const
 {
-    return transformation;
+    return fov;
 }

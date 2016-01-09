@@ -1,17 +1,17 @@
 #ifndef HELIOS_SPHERE_H
 #define HELIOS_SPHERE_H
 
-#include "object.h"
+#include "collidable.h"
 
 
-class Sphere : public Object {
+class Sphere : public Collidable {
 protected:
     double radius = 0;
 
 public:
     Sphere() = default;
 
-    Sphere(const Vec3 &position, double radius) : Object(position), radius(radius)
+    Sphere(const Vec3 &position, double radius) : Collidable(position), radius(radius)
     { };
 
     bool intersect(const Ray &ray, HitPoint *hit_point);

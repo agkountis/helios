@@ -8,12 +8,24 @@ protected:
     Vec3 position;
 
 public:
+
+    Object() = default;
+
     Object(const Vec3 &position) : position(position)
     { }
 
-    virtual ~Object() = default;
+    virtual void set_position(const Vec3 &position)
+    {
+        this->position = position;
+    }
 
-    virtual bool intersect(const Ray &ray, HitPoint *hit_point) = 0;
+
+    virtual const Vec3 &get_position() const
+    {
+        return position;
+    }
+
+    virtual ~Object() = default;
 };
 
 #endif //HELIOS_OBJECT_H
