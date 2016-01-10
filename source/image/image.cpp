@@ -48,9 +48,9 @@ bool Image::save_as_ppm(const std::string &file_name)
      */
     for (int i = 0; i < width * height * 3; i += 3) {
 
-        float *r = &pixels[i];
-        float *g = &pixels[i + 1];
-        float *b = &pixels[i + 2];
+        float *r = pixels[i];
+        float *g = pixels[i + 1];
+        float *b = pixels[i + 2];
 
         unsigned char int_rgb[3] = {(unsigned char) (*r * 255.0), (unsigned char) (*g * 255.0),
                                     (unsigned char) (*b * 255.0)};
@@ -91,12 +91,16 @@ unsigned int Image::get_height() const
 
 void Image::write_pixel(float r, float g, float b)
 {
-    pixels = new float(r);
-    pixels++;
-    pixels = new float(g);
-    pixels++;
-    pixels = new float(b);
-    pixels++;
+    if(current_write_index > width * height * 3) {
+        std::cerr << "Image write index out of bounds! Returning!" << std::endl;
+        return;
+    }
+
+    pixels.push_back(new float(r));
+    pixels.push_back(new float(g));
+    pixels.push_back(new float(b));
+
+    current_write_index += 3;
 }
 
 void Image::tone_map_pixel(float *r, float *g, float *b)

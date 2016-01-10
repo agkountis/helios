@@ -26,6 +26,8 @@ public:
 
     const Camera &get_camera() const;
 
+    unsigned long get_onject_count() const;
+
     bool load(std::string path);
 };
 

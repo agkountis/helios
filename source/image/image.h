@@ -9,7 +9,8 @@ private:
     unsigned int width;
     unsigned int height;
 
-    float *pixels = nullptr;
+    std::vector<float *> pixels;
+    int current_write_index = 0;
 
     bool save_as_ppm(const std::string &file_name);
 

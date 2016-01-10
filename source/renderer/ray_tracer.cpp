@@ -27,12 +27,31 @@ void RayTracer::render()
     /**
      * Work with scan-lines for now.
      */
-    for (int height = 0; height < image.get_height(); height++) {
-        for (int width = 0; width < image.get_width(); width++) {
+    for (int row = 0; row < image.get_width(); row++) {
+        for (int column = 0; column < image.get_height(); column++) {
             //TODO: Create a primary ray. Trace it and get the final color.
 
+            Ray primary_ray = create_primary_ray(row, column);
+
+
+            for (unsigned int i = 0; i < scene->get_onject_count() ; i++) {
+                Collidable *obj = scene->get_object(i);
+
+                HitPoint pt;
+
+                if(obj->intersect(primary_ray, &pt)){
+                    Vec3 color(1.0, 0.0, 0.0);
+                    image.tone_map_pixel((float*)&color.x, (float*)&color.y, (float*)&color.z);
+                    image.write_pixel(1, 0, 0);
+                }
+                else {
+                    image.write_pixel(0.3, 0.3, 0.3);
+                }
+            }
         }
     }
+
+    image.save("test.ppm", Image::IMG_FMT_PPM);
 }
 
 void RayTracer::shade()

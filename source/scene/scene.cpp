@@ -32,6 +32,12 @@ const Camera &Scene::get_camera() const
     return camera;
 }
 
+
+unsigned long Scene::get_onject_count() const
+{
+    return objects.size();
+}
+
 bool Scene::load(std::string path)
 {
     return false;
