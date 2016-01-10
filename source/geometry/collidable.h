@@ -7,6 +7,7 @@ class Collidable : public Object {
 public:
     Collidable(const Vec3 &position) : Object(position)
     { }
+
     virtual bool intersect(const Ray &ray, HitPoint *hit_point) = 0;
 };
 

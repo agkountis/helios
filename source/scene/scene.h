@@ -4,17 +4,27 @@
 #include <vector>
 #include <object.h>
 #include <string>
+#include <camera.h>
+#include <collidable.h>
 
 class Scene {
 private:
-    std::vector<Object *> objects;
+    Camera camera;
+
+    std::vector<Collidable *> objects;
 
 public:
-    void add_object(Object *object);
+    void add_object(Collidable *object);
 
-    Object *get_object(unsigned int idx) const;
+    Collidable *get_object(unsigned int idx) const;
 
-    const std::vector<Object *> &get_objects() const;
+    void add_objects(const std::vector<Collidable *> &objects);
+
+    const std::vector<Collidable *> &get_objects() const;
+
+    void set_camera(const Camera &camera);
+
+    const Camera &get_camera() const;
 
     bool load(std::string path);
 };

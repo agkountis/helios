@@ -19,7 +19,7 @@ void Camera::set_fov(float fov, CameraFovType fov_type)
             this->fov = fov;
             break;
         case CAM_FOV_DEGREES:
-            this->fov = (float)M_PI * fov / 180.0f;
+            this->fov = (float) M_PI * fov / 180.0f;
     }
 }
 
