@@ -16,7 +16,8 @@ int main(int argc, char **argv)
     scene->add_object(sphere);
     scene->set_camera(camera);
 
-    Image image(1024, 1024);
+    Image image;
+    image.create(1024, 768);
 
     Renderer *renderer = new RayTracer(scene, image);
 

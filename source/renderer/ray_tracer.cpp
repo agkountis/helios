@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include "ray_tracer.h"
+#include <limits>
+#include <float.h>
 
 RayTracer::~RayTracer()
 {
@@ -24,30 +26,43 @@ void RayTracer::render()
         exit(1);
     }
 
+    float *pixels = image.get_pixels();
+
     /**
      * Work with scan-lines for now.
      */
-    for (int row = 0; row < image.get_width(); row++) {
-        for (int column = 0; column < image.get_height(); column++) {
+    for (int x = 0; x < image.get_height(); x++) {
+        for (int y = 0; y < image.get_width(); y++) {
             //TODO: Create a primary ray. Trace it and get the final color.
 
-            Ray primary_ray = create_primary_ray(row, column);
+            Ray primary_ray = create_primary_ray(y, x);
 
+            Vec3 color;
 
+            HitPoint nearest;
+            nearest.distance = FLT_MAX;
+
+            /**
+             * Find intersection. Make this a function.
+             */
             for (unsigned int i = 0; i < scene->get_onject_count() ; i++) {
                 Collidable *obj = scene->get_object(i);
 
                 HitPoint pt;
 
-                if(obj->intersect(primary_ray, &pt)){
-                    Vec3 color(1.0, 0.0, 0.0);
-                    image.tone_map_pixel((float*)&color.x, (float*)&color.y, (float*)&color.z);
-                    image.write_pixel(1, 0, 0);
-                }
-                else {
-                    image.write_pixel(0.3, 0.3, 0.3);
+                if(obj->intersect(primary_ray, &pt) && pt.distance < nearest.distance){
+                    nearest = pt;
                 }
             }
+
+            if(nearest.object) {
+                color = Vec3(1.0, 0.0, 0.0);
+                image.tone_map_pixel((float*)&color.x, (float*)&color.y, (float*)&color.z);
+            }
+
+            *pixels++ = (float)color.x;
+            *pixels++ = (float)color.y;
+            *pixels++ = (float)color.z;
         }
     }
 
@@ -91,6 +106,8 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
     ray.direction.x = (2.0 * (float) pixel_x / (float) image_width - 1.0) * aspect;
     ray.direction.y = 1.0 - 2.0 * (float) pixel_y / (float) image_height;
     ray.direction.z = 1.0 / tan(camera_fov / 2.0);
+
+    ray.direction.normalize();
 
     Vec3 camera_dir = camera_target - camera_position;
 

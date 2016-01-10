@@ -48,12 +48,12 @@ bool Image::save_as_ppm(const std::string &file_name)
      */
     for (int i = 0; i < width * height * 3; i += 3) {
 
-        float *r = pixels[i];
-        float *g = pixels[i + 1];
-        float *b = pixels[i + 2];
+        float r = pixels[i];
+        float g = pixels[i + 1];
+        float b = pixels[i + 2];
 
-        unsigned char int_rgb[3] = {(unsigned char) (*r * 255.0), (unsigned char) (*g * 255.0),
-                                    (unsigned char) (*b * 255.0)};
+        unsigned char int_rgb[3] = {(unsigned char) (r * 255.0), (unsigned char) (g * 255.0),
+                                    (unsigned char) (b * 255.0)};
 
         file.write((const char *) &int_rgb[0], 3 * sizeof(unsigned char));
     }
@@ -76,7 +76,28 @@ bool Image::save_auto_detect(const std::string &file_name)
     return false;
 }
 
+
 /* ---------------------------------------------------------------------- */
+
+bool Image::create(unsigned int width, unsigned int height)
+{
+    delete[] pixels;
+
+    try {
+        pixels = new float[width * height * 3];
+    }
+    catch (...) {
+        return false;
+    }
+
+    this->width = width;
+    this->height = height;
+
+    std::cout << "Creating Image: (" << width << " x " << height << ")" << std::endl;
+
+    return true;
+}
+
 
 unsigned int Image::get_width() const
 {
@@ -86,21 +107,6 @@ unsigned int Image::get_width() const
 unsigned int Image::get_height() const
 {
     return height;
-}
-
-
-void Image::write_pixel(float r, float g, float b)
-{
-    if(current_write_index > width * height * 3) {
-        std::cerr << "Image write index out of bounds! Returning!" << std::endl;
-        return;
-    }
-
-    pixels.push_back(new float(r));
-    pixels.push_back(new float(g));
-    pixels.push_back(new float(b));
-
-    current_write_index += 3;
 }
 
 void Image::tone_map_pixel(float *r, float *g, float *b)
@@ -126,4 +132,10 @@ bool Image::save(const std::string &file_name, ImageFormat image_format)
 
     std::cerr << "ERROR: Could not detect the image file format!" << std::endl;
     return false;
+}
+
+
+float *Image::get_pixels() const
+{
+    return pixels;
 }
