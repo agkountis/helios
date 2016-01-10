@@ -17,6 +17,8 @@ protected:
 
     void find_intersection(const Ray &ray, HitPoint *hit_point);
 
+    Ray create_primary_ray(int pixel_x, int pixel_y) const;
+
 public:
     RayTracer() = default;
 
