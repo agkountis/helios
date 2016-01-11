@@ -33,7 +33,6 @@ void RayTracer::render()
      */
     for (int x = 0; x < image.get_height(); x++) {
         for (int y = 0; y < image.get_width(); y++) {
-            //TODO: Create a primary ray. Trace it and get the final color.
 
             Ray primary_ray = create_primary_ray(y, x);
 
@@ -50,7 +49,7 @@ void RayTracer::render()
 
                 HitPoint pt;
 
-                if(obj->intersect(primary_ray, &pt) && pt.distance < nearest.distance){
+                if(obj->intersect(primary_ray, &pt) && pt.distance < nearest.distance) {
                     nearest = pt;
                 }
             }
@@ -65,8 +64,6 @@ void RayTracer::render()
             *pixels++ = (float)color.z;
         }
     }
-
-    image.save("test.ppm", Image::IMG_FMT_PPM);
 }
 
 void RayTracer::shade()
