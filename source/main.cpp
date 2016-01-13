@@ -1,5 +1,5 @@
 #include <camera.h>
-#include <collidable.h>
+#include <drawable.h>
 #include <sphere.h>
 #include <scene.h>
 #include <renderer.h>
@@ -7,19 +7,19 @@
 
 int main(int argc, char **argv)
 {
-    Collidable *sphere = new Sphere(Vec3(0.0, 0.0, 4.0), 0.7);
-    Collidable *sphere2 = new Sphere(Vec3(2, 0.0, 6.0), 0.3);
-    Collidable *sphere3 = new Sphere(Vec3(0.0, -1.0, 4.0), 0.5);
-    Collidable *sphere4 = new Sphere(Vec3(0.0, 1.0, 4.0), 0.3);
+    Drawable *sphere = new Sphere(Vec3(0.0, 0.0, 4.0), 0.7);
+    Drawable *sphere2 = new Sphere(Vec3(2, 0.0, 6.0), 0.3);
+    Drawable *sphere3 = new Sphere(Vec3(0.0, -1.0, 4.0), 0.5);
+    Drawable *sphere4 = new Sphere(Vec3(0.0, 1.0, 4.0), 0.3);
 
     Camera camera;
     camera.set_fov(45.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
-    scene->add_object(sphere);
-    scene->add_object(sphere2);
-    scene->add_object(sphere3);
-    scene->add_object(sphere4);
+    scene->add_drawable(sphere);
+    scene->add_drawable(sphere2);
+    scene->add_drawable(sphere3);
+    scene->add_drawable(sphere4);
     scene->set_camera(camera);
 
     Image image;

@@ -1,5 +1,8 @@
 #include <iostream>
 #include <math.h>
+#include <limits>
+#include <material.h>
+#include <drawable.h>
 #include "ray_tracer.h"
 
 RayTracer::~RayTracer()
@@ -42,6 +45,9 @@ void RayTracer::render()
             find_intersection(primary_ray, &nearest);
 
             if (nearest.object) {
+
+                shade(&nearest);
+
                 color = Vec3(1.0, 0.0, 0.0);
                 image.tone_map_pixel(&color.x, &color.y, &color.z);
             }
@@ -53,9 +59,16 @@ void RayTracer::render()
     }
 }
 
-void RayTracer::shade()
+Vec3 RayTracer::shade(HitPoint *hit_point)
 {
+    Vec3 col;
 
+    Material material = ((Drawable*)hit_point->object)->material;
+
+    //TODO : Implement this.
+    //col = material.color *
+
+    return Vec3();
 }
 
 Vec3 RayTracer::trace_ray(const Ray &ray)
@@ -66,8 +79,8 @@ Vec3 RayTracer::trace_ray(const Ray &ray)
 
 void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
 {
-    for (unsigned int i = 0; i < scene->get_onject_count(); i++) {
-        Collidable *obj = scene->get_object(i);
+    for (unsigned int i = 0; i < scene->get_drawable_count(); i++) {
+        Collidable *obj = scene->get_drawable(i);
 
         HitPoint pt;
 

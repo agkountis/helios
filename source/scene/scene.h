@@ -6,27 +6,45 @@
 #include <string>
 #include <camera.h>
 #include <collidable.h>
+#include <drawable.h>
+#include "../light/light.h"
 
 class Scene {
 private:
     Camera camera;
 
-    std::vector<Collidable *> objects;
+    std::vector<Drawable *> drawables;
+
+    std::vector<Light *> lights;
+
+    void destroy_drawables();
+
+    void destroy_lights();
 
 public:
-    void add_object(Collidable *object);
-
-    Collidable *get_object(unsigned int idx) const;
-
-    void add_objects(const std::vector<Collidable *> &objects);
-
-    const std::vector<Collidable *> &get_objects() const;
-
     void set_camera(const Camera &camera);
 
     const Camera &get_camera() const;
 
-    unsigned long get_onject_count() const;
+    void add_drawable(Drawable *object);
+
+    Drawable *get_drawable(unsigned int index) const;
+
+    void set_drawables(const std::vector<Drawable *> &objects);
+
+    const std::vector<Drawable *> &get_drawables() const;
+
+    unsigned long get_drawable_count() const;
+
+    void add_light(Light *light);
+
+    Light *get_light(unsigned int index) const;
+
+    void set_lights(const std::vector<Light *> &lights);
+
+    const std::vector<Light *> &get_lights() const;
+
+    unsigned long get_lights_count() const;
 
     bool load(std::string path);
 };

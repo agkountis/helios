@@ -4,7 +4,7 @@
 
 class Renderer {
 protected:
-    virtual void shade() = 0;
+    virtual Vec3 shade(HitPoint *hit_point) = 0;
 
     virtual Vec3 trace_ray(const Ray &ray) = 0;
 
