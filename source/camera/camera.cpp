@@ -27,3 +27,32 @@ float Camera::get_fov() const
 {
     return fov;
 }
+
+
+const Mat4 &Camera::get_transformation_matrix()
+{
+    Vec3 camera_dir = target - position;
+
+    /**
+     * Assume the up camera vector points towards the positive y axis.
+     */
+    Vec3 up(0.0f, 1.0f, 0.0f);
+    Vec3 right = cross(up, camera_dir);
+
+    camera_dir.normalize();
+
+    /**
+     * Compute the actual up vector.
+     */
+    up = cross(camera_dir, right);
+
+    /**
+     * Create the correct camera matrix.
+     */
+    transformation.set_column_vector(right.x, right.y, right.z, 0.0, 0);
+    transformation.set_column_vector(up.x, up.y, up.z, 0.0, 1);
+    transformation.set_column_vector(camera_dir.x, camera_dir.y, camera_dir.z, 0.0, 2);
+    transformation.set_column_vector(position.x, position.y, position.z, 1.0, 3);
+
+    return transformation;
+}

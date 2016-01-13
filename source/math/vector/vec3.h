@@ -3,24 +3,25 @@
 
 class Vec3 {
 public:
-    double x = 0;
-    double y = 0;
-    double z = 0;
+    float x = 0;
+    float y = 0;
+    float z = 0;
 
     Vec3() = default;
 
-    Vec3(double x, double y, double z);
+    Vec3(float x, float y, float z) : x(x), y(y), z(z)
+    { }
 
-    double length();
+    float length();
 
-    double length_squared();
+    float length_squared();
 
     void normalize();
 
     Vec3 normalized();
 };
 
-inline double dot(const Vec3 &vec1, const Vec3 &vec2)
+inline float dot(const Vec3 &vec1, const Vec3 &vec2)
 {
     return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
@@ -43,27 +44,27 @@ inline Vec3 operator-(const Vec3 &vec)
 /**
  * Binary operators -- Vector (op) Scalar -- Scalar (op) Vector
  */
-inline Vec3 operator*(const Vec3 &vec, double scalar)
+inline Vec3 operator*(const Vec3 &vec, float scalar)
 {
     return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
 }
 
-inline Vec3 operator*(double scalar, const Vec3 &vec)
+inline Vec3 operator*(float scalar, const Vec3 &vec)
 {
     return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
 }
 
-inline Vec3 operator/(const Vec3 &vec, double scalar)
+inline Vec3 operator/(const Vec3 &vec, float scalar)
 {
     return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
 }
 
-inline Vec3 operator/(double scalar, const Vec3 &vec)
+inline Vec3 operator/(float scalar, const Vec3 &vec)
 {
     return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
 }
 
-inline Vec3 operator+(const Vec3 &vec, double scalar)
+inline Vec3 operator+(const Vec3 &vec, float scalar)
 {
     return Vec3(vec.x + scalar, vec.y + scalar, vec.z + scalar);
 }

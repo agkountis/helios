@@ -1,8 +1,8 @@
 #include "mat4.h"
 
 
-Mat4::Mat4(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20,
-           double m21, double m22, double m23, double m30, double m31, double m32, double m33)
+Mat4::Mat4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
+           float m21, float m22, float m23, float m30, float m31, float m32, float m33)
 {
     matrix[0][0] = m00;
     matrix[0][1] = m01;
@@ -34,7 +34,7 @@ Mat4::Mat4(const Mat4 &mat)
     }
 }
 
-void Mat4::set_row_vector(double x, double y, double z, double w, unsigned int row_idx)
+void Mat4::set_row_vector(float x, float y, float z, float w, unsigned int row_idx)
 {
     matrix[row_idx][0] = x;
     matrix[row_idx][1] = y;
@@ -42,7 +42,7 @@ void Mat4::set_row_vector(double x, double y, double z, double w, unsigned int r
     matrix[row_idx][3] = w;
 }
 
-void Mat4::set_column_vector(double x, double y, double z, double w, unsigned int column_idx)
+void Mat4::set_column_vector(float x, float y, float z, float w, unsigned int column_idx)
 {
     matrix[0][column_idx] = x;
     matrix[1][column_idx] = y;
@@ -50,7 +50,7 @@ void Mat4::set_column_vector(double x, double y, double z, double w, unsigned in
     matrix[3][column_idx] = w;
 }
 
-void Mat4::translate(double x, double y, double z)
+void Mat4::translate(float x, float y, float z)
 {
     matrix[0][3] += x;
     matrix[1][3] += y;
@@ -65,7 +65,7 @@ void Mat4::translate(const Vec3 &position)
 }
 
 
-void Mat4::scale(double x, double y, double z)
+void Mat4::scale(float x, float y, float z)
 {
     matrix[0][0] *= x;
     matrix[1][1] *= y;
@@ -89,21 +89,21 @@ void Mat4::set_identity()
     }
 }
 
-double Mat4::determinant() const
+float Mat4::determinant() const
 {
-    double det11 = matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
+    float det11 = matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
                    matrix[1][2] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) +
                    matrix[1][3] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]);
 
-    double det12 = matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
+    float det12 = matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
                    matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
                    matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]);
 
-    double det13 = matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) -
+    float det13 = matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) -
                    matrix[1][1] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
                    matrix[1][3] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
 
-    double det14 = matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]) -
+    float det14 = matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]) -
                    matrix[1][1] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]) +
                    matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
 
@@ -118,7 +118,7 @@ void Mat4::transpose()
     for (int i = 0; i < 3; i++) {
 
         for (int j = 0; j < 4 - column_offset; j++) {
-            double tmp = matrix[i][j + column_offset];
+            float tmp = matrix[i][j + column_offset];
             matrix[i][j + column_offset] = matrix[j + column_offset][i];
             matrix[j + column_offset][i] = tmp;
         }

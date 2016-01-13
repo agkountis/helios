@@ -9,6 +9,8 @@ class Camera : public Object {
 private:
     Vec3 target;
 
+    Mat4 transformation;
+
     /**
      * The Field of View in radians.
      */
@@ -32,6 +34,8 @@ public:
     void set_fov(float fov, CameraFovType fov_type);
 
     float get_fov() const;
+
+    const Mat4 &get_transformation_matrix();
 };
 
 #endif //HELIOS_CAMERA_H

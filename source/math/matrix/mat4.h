@@ -5,7 +5,7 @@
 
 class Mat4 {
 private:
-    double matrix[4][4] = {{1.0, 0.0, 0.0, 0.0},
+    float matrix[4][4] = {{1.0, 0.0, 0.0, 0.0},
                            {0.0, 1.0, 0.0, 0.0},
                            {0.0, 0.0, 1.0, 0.0},
                            {0.0, 0.0, 0.0, 1.0}};
@@ -13,28 +13,28 @@ private:
 public:
     Mat4() = default;
 
-    Mat4(double m00, double m01, double m02, double m03,
-         double m10, double m11, double m12, double m13,
-         double m20, double m21, double m22, double m23,
-         double m30, double m31, double m32, double m33);
+    Mat4(float m00, float m01, float m02, float m03,
+         float m10, float m11, float m12, float m13,
+         float m20, float m21, float m22, float m23,
+         float m30, float m31, float m32, float m33);
 
     Mat4(const Mat4 &mat);
 
-    void set_row_vector(double x, double y, double z, double w, unsigned int row_idx);
+    void set_row_vector(float x, float y, float z, float w, unsigned int row_idx);
 
-    void set_column_vector(double x, double y, double z, double w, unsigned int column_idx);
+    void set_column_vector(float x, float y, float z, float w, unsigned int column_idx);
 
-    void translate(double x, double y, double z);
+    void translate(float x, float y, float z);
 
     void translate(const Vec3 &position);
 
-    void scale(double x, double y, double z);
+    void scale(float x, float y, float z);
 
     void scale(const Vec3 &scale);
 
     void set_identity();
 
-    double determinant() const;
+    float determinant() const;
 
     void transpose();
 
@@ -44,12 +44,12 @@ public:
 
     Mat4 inverse() const;
 
-    inline double *operator[](unsigned int i)
+    inline float *operator[](unsigned int i)
     { return matrix[i]; }
 
     friend Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2);
 
-    friend Mat4 operator*(Mat4 &mat, double scalar);
+    friend Mat4 operator*(Mat4 &mat, float scalar);
 
     inline void operator=(const Mat4 &mat2)
     {
@@ -119,7 +119,7 @@ inline Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2)
     return res;
 }
 
-inline Mat4 operator*(Mat4 &mat, double scalar)
+inline Mat4 operator*(Mat4 &mat, float scalar)
 {
     Mat4 res;
     for (int i = 0; i < 4; i++) {
