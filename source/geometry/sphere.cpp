@@ -20,7 +20,7 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     double a = dot(ray.direction, ray.direction);
 
     double b = 2 * ray.direction.x * (ray.origin.x - position.x) +
-                2 * ray.direction.y * (ray.origin.y - position.x) +
+                2 * ray.direction.y * (ray.origin.y - position.y) +
                 2 * ray.direction.z * (ray.origin.z - position.z);
 
     double c = dot(ray.origin, ray.origin) + dot(position, position) - 2 * dot(ray.origin, position) - radius * radius;
@@ -36,9 +36,9 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
 
     double disc_sqrt = sqrt(disc);
 
-    double t0 = -b + disc_sqrt / 2.0 * a;
+    double t0 = (-b + disc_sqrt) / (2.0 * a);
 
-    double t1 = -b - disc_sqrt / 2.0 * a;
+    double t1 = (-b - disc_sqrt) / (2.0 * a);
 
 
     /**
@@ -67,7 +67,7 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     hit_point->distance = t;
 
     //TODO: Check if the subtraction order is correct here.
-    hit_point->normal = ((hit_point->position - position) / radius).normalized();
+    hit_point->normal = (hit_point->position - position) / radius;
 
     return true;
 }
