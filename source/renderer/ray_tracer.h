@@ -11,7 +11,7 @@ protected:
 
     Image image;
 
-    Vec3 shade(HitPoint *hit_point);
+    Vec3 shade(const Ray &ray, HitPoint *hit_point);
 
     Vec3 trace_ray(const Ray &ray);
 

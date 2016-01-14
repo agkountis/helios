@@ -28,7 +28,6 @@ float Camera::get_fov() const
     return fov;
 }
 
-
 const Mat4 &Camera::get_transformation_matrix()
 {
     Vec3 camera_dir = target - position;

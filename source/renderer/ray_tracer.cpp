@@ -35,9 +35,13 @@ void RayTracer::render()
     for (int x = 0; x < image.get_height(); x++) {
         for (int y = 0; y < image.get_width(); y++) {
 
+            if(x == (image.get_height() / 2) && y == (image.get_width() / 2)) {
+                asm volatile("int $3\n");
+            }
+
             Ray primary_ray = create_primary_ray(y, x);
 
-            Vec3 color;
+            Vec3 color(0.3,0.3,0.3);
 
             HitPoint nearest;
             nearest.distance = std::numeric_limits<float>::max();
@@ -45,10 +49,7 @@ void RayTracer::render()
             find_intersection(primary_ray, &nearest);
 
             if (nearest.object) {
-
-                shade(&nearest);
-
-                color = shade(&nearest);
+                color = shade(primary_ray, &nearest);
                 image.tone_map_pixel(&color.x, &color.y, &color.z);
             }
 
@@ -59,27 +60,27 @@ void RayTracer::render()
     }
 }
 
-Vec3 RayTracer::shade(HitPoint *hit_point)
+Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point)
 {
     Material material = ((Drawable*)hit_point->object)->material;
 
     Light *lt = scene->get_light(0);
 
-    Vec3 ldir = lt->get_position() - scene->get_camera().get_position();
-    Vec3 vdir = -scene->get_camera().get_position();
+    Vec3 ldir = lt->get_position() - hit_point->position;
+    Vec3 vdir = -ray.direction;
 
     ldir.normalize();
     vdir.normalize();
 
-    Vec3 reflection = reflect(-ldir, hit_point->normal);
+    Vec3 reflection = reflect(vdir, hit_point->normal);
 
-    float diff_light = std::max(dot(hit_point->normal, ldir), 0.0f);
-    float spec_light = (float)pow(std::max(dot(reflection, vdir), 0.0f), 60.0f);
+    float diff_light = std::max(dot(ldir, hit_point->normal), 0.0f);
+    float spec_light = (float)pow(std::max(dot(reflection, ldir), 0.0f), 60.0f);
 
-    Vec3 diff_color = material.color * lt->get_color() * diff_light;
+    Vec3 diff_color = material.color  * diff_light;
     Vec3 spec_color = Vec3(1.0f, 1.0f, 1.0f) * spec_light;
 
-    return diff_color + spec_color;
+    return (diff_color + spec_color) * lt->get_color();
 }
 
 Vec3 RayTracer::trace_ray(const Ray &ray)

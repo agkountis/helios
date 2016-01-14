@@ -19,9 +19,11 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
 
     double a = dot(ray.direction, ray.direction);
 
-    double b = 2.0 * dot(ray.direction, ray.origin - position);
+    double b = 2 * ray.direction.x * (ray.origin.x - position.x) +
+                2 * ray.direction.y * (ray.origin.y - position.x) +
+                2 * ray.direction.z * (ray.origin.z - position.z);
 
-    double c = dot(ray.origin - position, ray.origin - position) - radius * radius;
+    double c = dot(ray.origin, ray.origin) + dot(position, position) - 2 * dot(ray.origin, position) - radius * radius;
 
 
     double disc = b * b - (4.0 * a * c);
