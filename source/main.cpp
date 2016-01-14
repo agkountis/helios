@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 
     Light *lt = new Light;
     lt->set_color(Vec3(1.0f, 1.0f, 1.0f));
-    lt->set_position(Vec3(0.0f, 0.0f, 0.0f));
+    lt->set_position(Vec3(5.0f, 0.0f, 0.0f));
 
     scene->add_light(lt);
 
