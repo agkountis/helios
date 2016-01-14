@@ -1,7 +1,6 @@
 #ifndef HELIOS_SPHERE_H
 #define HELIOS_SPHERE_H
 
-#include "collidable.h"
 #include "drawable.h"
 
 class Sphere : public Drawable {

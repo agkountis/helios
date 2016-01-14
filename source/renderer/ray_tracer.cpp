@@ -48,7 +48,7 @@ void RayTracer::render()
 
                 shade(&nearest);
 
-                color = Vec3(1.0, 0.0, 0.0);
+                color = shade(&nearest);
                 image.tone_map_pixel(&color.x, &color.y, &color.z);
             }
 
@@ -61,14 +61,25 @@ void RayTracer::render()
 
 Vec3 RayTracer::shade(HitPoint *hit_point)
 {
-    Vec3 col;
-
     Material material = ((Drawable*)hit_point->object)->material;
 
-    //TODO : Implement this.
-    //col = material.color *
+    Light *lt = scene->get_light(0);
 
-    return Vec3();
+    Vec3 ldir = lt->get_position() - scene->get_camera().get_position();
+    Vec3 vdir = -scene->get_camera().get_position();
+
+    ldir.normalize();
+    vdir.normalize();
+
+    Vec3 reflection = reflect(-ldir, hit_point->normal);
+
+    float diff_light = std::max(dot(hit_point->normal, ldir), 0.0f);
+    float spec_light = (float)pow(std::max(dot(reflection, vdir), 0.0f), 60.0f);
+
+    Vec3 diff_color = material.color * lt->get_color() * diff_light;
+    Vec3 spec_color = Vec3(1.0f, 1.0f, 1.0f) * spec_light;
+
+    return diff_color + spec_color;
 }
 
 Vec3 RayTracer::trace_ray(const Ray &ray)

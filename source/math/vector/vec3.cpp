@@ -15,14 +15,19 @@ void Vec3::normalize()
 {
     float length = this->length();
 
-    x /= length;
-    y /= length;
-    z /= length;
+    if(length) {
+        x /= length;
+        y /= length;
+        z /= length;
+    }
 }
 
 Vec3 Vec3::normalized()
 {
     float length = this->length();
+
+    if(!length)
+        return Vec3();
 
     return Vec3(x / length, y / length, z / length);
 }

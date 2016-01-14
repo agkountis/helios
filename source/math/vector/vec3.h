@@ -21,17 +21,6 @@ public:
     Vec3 normalized();
 };
 
-inline float dot(const Vec3 &vec1, const Vec3 &vec2)
-{
-    return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
-}
-
-inline Vec3 cross(const Vec3 &vec1, const Vec3 &vec2)
-{
-    return Vec3(vec1.y * vec2.z - vec1.z * vec2.y, vec1.z * vec2.x - vec1.x * vec2.z,
-                vec1.x * vec2.y - vec1.y * vec2.z);
-}
-
 /**
  * Unary operators
  */
@@ -81,6 +70,28 @@ inline Vec3 operator+(const Vec3 &vec1, const Vec3 &vec2)
 inline Vec3 operator-(const Vec3 &vec1, const Vec3 &vec2)
 {
     return Vec3(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
+}
+
+inline Vec3 operator*(const Vec3 &vec1, const Vec3 &vec2)
+{
+    return Vec3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
+}
+/* ----------------------------------------------------------------- */
+
+inline float dot(const Vec3 &vec1, const Vec3 &vec2)
+{
+    return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+}
+
+inline Vec3 cross(const Vec3 &vec1, const Vec3 &vec2)
+{
+    return Vec3(vec1.y * vec2.z - vec1.z * vec2.y, vec1.z * vec2.x - vec1.x * vec2.z,
+                vec1.x * vec2.y - vec1.y * vec2.z);
+}
+
+inline Vec3 reflect(const Vec3 &vec, const Vec3 &normal)
+{
+    return vec - 2 * dot(vec, normal) * normal;
 }
 
 #endif //HELIOS_VEC3_H
