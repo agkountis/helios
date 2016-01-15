@@ -66,7 +66,6 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     hit_point->position = ray.origin + ray.direction * t;
     hit_point->distance = t;
 
-    //TODO: Check if the subtraction order is correct here.
     hit_point->normal = (hit_point->position - position) / radius;
 
     return true;

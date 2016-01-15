@@ -41,7 +41,7 @@ void RayTracer::render()
 
             Ray primary_ray = create_primary_ray(y, x);
 
-            Vec3 color(0.3,0.3,0.3);
+            Vec3 color;//(0.3, 0.3, 0.3);
 
             HitPoint nearest;
             nearest.distance = std::numeric_limits<float>::max();
@@ -62,27 +62,51 @@ void RayTracer::render()
 
 Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point)
 {
-    Material material = ((Drawable*)hit_point->object)->material;
+    Vec3 color;
 
-    Light *lt = scene->get_light(0);
+    Material material = ((Drawable *) hit_point->object)->material;
 
-    Vec3 ldir = lt->get_position() - hit_point->position;
+    Vec3 view_direction = -ray.direction;
 
-    Vec3 vdir = -ray.direction;
+    std::vector<Light *> lights = scene->get_lights();
 
-    ldir.normalize();
-    vdir.normalize();
+    for (Light *light : lights) {
 
-    //TODO: Fix the reflection to return the correct vector so i dont have to negate it.
-    Vec3 reflection = -reflect(vdir, hit_point->normal);
+        /**
+         * Create a shadow ray from the object hit point towards the current light in the loop.
+         */
+        Ray shadow_ray(hit_point->position, (light->get_position() - hit_point->position).normalized());
 
-    float diff_light = std::max(dot(ldir, hit_point->normal), 0.0f);
-    float spec_light = (float)pow(std::max(dot(reflection, ldir), 0.0f), 40.0f);
+        HitPoint shadow_hit_point;
+        shadow_hit_point.distance = std::numeric_limits<float>::max();
 
-    Vec3 diff_color = material.color  * diff_light;
-    Vec3 spec_color = Vec3(1.0f, 1.0f, 1.0f) * spec_light;
+        /**
+         * Check for intersections with other objects.
+         * If an intersection is found then the being shaded is obscured by another object thus it is in shadow.
+         */
+        find_intersection(shadow_ray, &shadow_hit_point);
 
-    return (diff_color + spec_color) * lt->get_color();
+        /**
+         * If an object is hit skip lighting calculations.
+         */
+        if(shadow_hit_point.object)
+            continue;
+
+        Vec3 light_direction = light->get_position() - hit_point->position;
+        light_direction.normalize();
+
+        Vec3 reflection_vector = -reflect(view_direction, hit_point->normal);
+
+        float diff_light = std::max(dot(light_direction, hit_point->normal), 0.0f);
+        float spec_light = (float) pow(std::max(dot(reflection_vector, light_direction), 0.0f), material.shininess);
+
+        color = color + material.diffuse_color * diff_light;
+        color = color + material.specular_color * spec_light;
+
+        color = color * light->get_color();
+    }
+
+    return color;
 }
 
 Vec3 RayTracer::trace_ray(const Ray &ray)
@@ -122,7 +146,7 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
      */
     ray.direction.x = (2.0f * (float) pixel_x / (float) image_width - 1.0f) * aspect;
     ray.direction.y = 1.0f - 2.0f * (float) pixel_y / (float) image_height;
-    ray.direction.z = 1.0f / (float)tan(camera_fov / 2.0f);
+    ray.direction.z = 1.0f / (float) tan(camera_fov / 2.0f);
 
     ray.direction.normalize();
 
