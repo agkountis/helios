@@ -122,7 +122,9 @@ void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
 
         HitPoint pt;
 
-        if (obj->intersect(ray, &pt) && pt.distance < hit_point->distance) {
+        obj->intersect(ray, &pt);
+
+        if (pt.object && pt.distance < hit_point->distance) {
             *hit_point = pt;
         }
     }

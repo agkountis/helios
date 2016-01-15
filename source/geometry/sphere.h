@@ -13,7 +13,7 @@ public:
     Sphere(const Vec3 &position, double radius) : Drawable(position), radius(radius)
     { };
 
-    bool intersect(const Ray &ray, HitPoint *hit_point);
+    void intersect(const Ray &ray, HitPoint *hit_point);
 };
 
 #endif //HELIOS_SPHERE_H

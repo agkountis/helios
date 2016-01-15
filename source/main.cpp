@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     Drawable *sphere2 = new Sphere(Vec3(-0.4f, -0.1f, 2.0f), 0.2);
     sphere2->material.diffuse_color = Vec3(0.0f, 0.0f, 1.0f);
     sphere2->material.specular_color = Vec3(1.0f, 1.0f, 1.0f);
-    sphere2->material.shininess = 10.0f;
+    sphere2->material.shininess = 20.0f;
 
     Camera camera;
     camera.set_fov(90.0f, Camera::CAM_FOV_DEGREES);

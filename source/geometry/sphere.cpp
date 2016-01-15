@@ -1,7 +1,7 @@
 #include "sphere.h"
 #include <math.h>
 
-bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
+void Sphere::intersect(const Ray &ray, HitPoint *hit_point)
 {
     /**
      * sphere vector equation is |x - position| = radius
@@ -32,7 +32,7 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
      * If the discriminant is < 0 we have no intersection.
      */
     if (disc < 1e-4)
-        return false;
+        return;
 
     double disc_sqrt = sqrt(disc);
 
@@ -56,7 +56,7 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
      * If both solutions turn out to be negative we have no intersection.
      */
     if (t < 1e-4)
-        return false;
+        return;
 
     /**
      * We have a hit!
@@ -67,6 +67,4 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     hit_point->distance = t;
 
     hit_point->normal = (hit_point->position - position) / radius;
-
-    return true;
 }
