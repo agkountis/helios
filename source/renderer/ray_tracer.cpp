@@ -41,7 +41,7 @@ void RayTracer::render()
 
             Ray primary_ray = create_primary_ray(y, x);
 
-            Vec3 color;//(0.3, 0.3, 0.3);
+            Vec3 color(0.3, 0.3, 0.3);
 
             HitPoint nearest;
             nearest.distance = std::numeric_limits<float>::max();
