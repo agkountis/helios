@@ -11,9 +11,11 @@ protected:
 
     Image image;
 
-    Vec3 shade(const Ray &ray, HitPoint *hit_point);
+    static const int max_iterations = 5;
 
-    Vec3 trace_ray(const Ray &ray);
+    Vec3 shade(const Ray &ray, HitPoint *hit_point, int iterations);
+
+    Vec3 trace_ray(const Ray &ray, int iterations = 0);
 
     void find_intersection(const Ray &ray, HitPoint *hit_point);
 

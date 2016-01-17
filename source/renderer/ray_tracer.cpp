@@ -1,6 +1,5 @@
 #include <iostream>
 #include <math.h>
-#include <limits>
 #include <material.h>
 #include <drawable.h>
 #include "ray_tracer.h"
@@ -41,17 +40,7 @@ void RayTracer::render()
 
             Ray primary_ray = create_primary_ray(y, x);
 
-            Vec3 color(0.3, 0.3, 0.3);
-
-            HitPoint nearest;
-            nearest.distance = std::numeric_limits<float>::max();
-
-            find_intersection(primary_ray, &nearest);
-
-            if (nearest.object) {
-                color = shade(primary_ray, &nearest);
-                image.tone_map_pixel(&color.x, &color.y, &color.z);
-            }
+            Vec3 color = trace_ray(primary_ray);
 
             *pixels++ = color.x;
             *pixels++ = color.y;
@@ -60,7 +49,7 @@ void RayTracer::render()
     }
 }
 
-Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point)
+Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
 {
     Vec3 color;
 
@@ -89,7 +78,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point)
         /**
          * If an object is hit skip lighting calculations.
          */
-        if(shadow_hit_point.object)
+        if (shadow_hit_point.object && shadow_hit_point.distance < 1.0)
             continue;
 
         Vec3 light_direction = light->get_position() - hit_point->position;
@@ -106,14 +95,31 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point)
         color = color * light->get_color();
     }
 
+    if (material.reflectivity > 0.0001) {
+        Ray reflection_ray = Ray(hit_point->position, reflect(-ray.direction, hit_point->normal));
+        color = color + trace_ray(reflection_ray, iterations + 1) * material.reflectivity;
+    }
+
     return color;
 }
 
-Vec3 RayTracer::trace_ray(const Ray &ray)
+Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 {
-    return Vec3();
-}
+    HitPoint nearest;
+    nearest.distance = std::numeric_limits<float>::max();
 
+    find_intersection(ray, &nearest);
+
+
+    if (!nearest.object || iterations > max_iterations) {
+        return Vec3(0.3, 0.3, 0.3);
+    }
+
+    Vec3 color = shade(ray, &nearest, iterations);
+    image.tone_map_pixel(&color.x, &color.y, &color.z);
+
+    return color;
+}
 
 void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
 {
@@ -122,14 +128,11 @@ void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
 
         HitPoint pt;
 
-        obj->intersect(ray, &pt);
-
-        if (pt.object && pt.distance < hit_point->distance) {
+        if (obj->intersect(ray, &pt) && pt.distance < hit_point->distance) {
             *hit_point = pt;
         }
     }
 }
-
 
 Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
 {

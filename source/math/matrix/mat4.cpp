@@ -4,79 +4,79 @@
 Mat4::Mat4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
            float m21, float m22, float m23, float m30, float m31, float m32, float m33)
 {
-    matrix[0][0] = m00;
-    matrix[0][1] = m01;
-    matrix[0][2] = m02;
-    matrix[0][3] = m03;
+    data[0][0] = m00;
+    data[0][1] = m01;
+    data[0][2] = m02;
+    data[0][3] = m03;
 
-    matrix[1][0] = m10;
-    matrix[1][1] = m11;
-    matrix[1][2] = m12;
-    matrix[1][3] = m13;
+    data[1][0] = m10;
+    data[1][1] = m11;
+    data[1][2] = m12;
+    data[1][3] = m13;
 
-    matrix[2][0] = m20;
-    matrix[2][1] = m21;
-    matrix[2][2] = m22;
-    matrix[2][3] = m23;
+    data[2][0] = m20;
+    data[2][1] = m21;
+    data[2][2] = m22;
+    data[2][3] = m23;
 
-    matrix[3][0] = m30;
-    matrix[3][1] = m31;
-    matrix[3][2] = m32;
-    matrix[3][3] = m33;
+    data[3][0] = m30;
+    data[3][1] = m31;
+    data[3][2] = m32;
+    data[3][3] = m33;
 }
 
 Mat4::Mat4(const Mat4 &mat)
 {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            matrix[i][j] = mat.matrix[i][j];
+            data[i][j] = mat.data[i][j];
         }
     }
 }
 
 void Mat4::set_row_vector(float x, float y, float z, float w, unsigned int row_idx)
 {
-    matrix[row_idx][0] = x;
-    matrix[row_idx][1] = y;
-    matrix[row_idx][2] = z;
-    matrix[row_idx][3] = w;
+    data[row_idx][0] = x;
+    data[row_idx][1] = y;
+    data[row_idx][2] = z;
+    data[row_idx][3] = w;
 }
 
 void Mat4::set_column_vector(float x, float y, float z, float w, unsigned int column_idx)
 {
-    matrix[0][column_idx] = x;
-    matrix[1][column_idx] = y;
-    matrix[2][column_idx] = z;
-    matrix[3][column_idx] = w;
+    data[0][column_idx] = x;
+    data[1][column_idx] = y;
+    data[2][column_idx] = z;
+    data[3][column_idx] = w;
 }
 
 void Mat4::translate(float x, float y, float z)
 {
-    matrix[0][3] += x;
-    matrix[1][3] += y;
-    matrix[2][3] += z;
+    data[0][3] += x;
+    data[1][3] += y;
+    data[2][3] += z;
 }
 
 void Mat4::translate(const Vec3 &position)
 {
-    matrix[0][3] += position.x;
-    matrix[1][3] += position.y;
-    matrix[2][3] += position.z;
+    data[0][3] += position.x;
+    data[1][3] += position.y;
+    data[2][3] += position.z;
 }
 
 
 void Mat4::scale(float x, float y, float z)
 {
-    matrix[0][0] *= x;
-    matrix[1][1] *= y;
-    matrix[2][2] *= z;
+    data[0][0] *= x;
+    data[1][1] *= y;
+    data[2][2] *= z;
 }
 
 void Mat4::scale(const Vec3 &scale)
 {
-    matrix[0][0] *= scale.x;
-    matrix[1][1] *= scale.y;
-    matrix[2][2] *= scale.z;
+    data[0][0] *= scale.x;
+    data[1][1] *= scale.y;
+    data[2][2] *= scale.z;
 }
 
 
@@ -84,30 +84,30 @@ void Mat4::set_identity()
 {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            i == j ? matrix[i][j] = 1.0 : matrix[i][j] = 0.0;
+            i == j ? data[i][j] = 1.0 : data[i][j] = 0.0;
         }
     }
 }
 
 float Mat4::determinant() const
 {
-    float det11 = matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
-                   matrix[1][2] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) +
-                   matrix[1][3] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]);
+    float det11 = data[1][1] * (data[2][2] * data[3][3] - data[3][2] * data[2][3]) -
+                  data[1][2] * (data[2][1] * data[3][3] - data[3][1] * data[2][3]) +
+                  data[1][3] * (data[2][1] * data[3][2] - data[3][1] * data[2][2]);
 
-    float det12 = matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[3][2] * matrix[2][3]) -
-                   matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
-                   matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]);
+    float det12 = data[1][0] * (data[2][2] * data[3][3] - data[3][2] * data[2][3]) -
+                  data[1][2] * (data[2][0] * data[3][3] - data[3][0] * data[2][3]) +
+                  data[1][3] * (data[2][0] * data[3][2] - data[3][0] * data[2][2]);
 
-    float det13 = matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[3][1] * matrix[2][3]) -
-                   matrix[1][1] * (matrix[2][0] * matrix[3][3] - matrix[3][0] * matrix[2][3]) +
-                   matrix[1][3] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
+    float det13 = data[1][0] * (data[2][1] * data[3][3] - data[3][1] * data[2][3]) -
+                  data[1][1] * (data[2][0] * data[3][3] - data[3][0] * data[2][3]) +
+                  data[1][3] * (data[2][0] * data[3][1] - data[3][0] * data[2][1]);
 
-    float det14 = matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[3][1] * matrix[2][2]) -
-                   matrix[1][1] * (matrix[2][0] * matrix[3][2] - matrix[3][0] * matrix[2][2]) +
-                   matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[3][0] * matrix[2][1]);
+    float det14 = data[1][0] * (data[2][1] * data[3][2] - data[3][1] * data[2][2]) -
+                  data[1][1] * (data[2][0] * data[3][2] - data[3][0] * data[2][2]) +
+                  data[1][2] * (data[2][0] * data[3][1] - data[3][0] * data[2][1]);
 
-    return matrix[0][0] * det11 - matrix[0][1] * det12 + matrix[0][2] * det13 - matrix[0][3] * det14;
+    return data[0][0] * det11 - data[0][1] * det12 + data[0][2] * det13 - data[0][3] * det14;
 }
 
 
@@ -118,9 +118,9 @@ void Mat4::transpose()
     for (int i = 0; i < 3; i++) {
 
         for (int j = 0; j < 4 - column_offset; j++) {
-            float tmp = matrix[i][j + column_offset];
-            matrix[i][j + column_offset] = matrix[j + column_offset][i];
-            matrix[j + column_offset][i] = tmp;
+            float tmp = data[i][j + column_offset];
+            data[i][j + column_offset] = data[j + column_offset][i];
+            data[j + column_offset][i] = tmp;
         }
 
         column_offset++;
@@ -142,75 +142,75 @@ Mat4 Mat4::adjoint() const
     Mat4 coefficient;
 
     /* Row 0 ------------------------------------------------------------------------------------------- */
-    coefficient[0][0] = matrix[1][1] * (matrix[3][3] * matrix[2][2] - matrix[2][3] * matrix[3][2]) -
-                        matrix[1][2] * (matrix[3][3] * matrix[2][1] - matrix[2][3] * matrix[3][1]) +
-                        matrix[1][3] * (matrix[3][2] * matrix[2][1] - matrix[2][2] * matrix[3][1]);
+    coefficient[0][0] = data[1][1] * (data[3][3] * data[2][2] - data[2][3] * data[3][2]) -
+                        data[1][2] * (data[3][3] * data[2][1] - data[2][3] * data[3][1]) +
+                        data[1][3] * (data[3][2] * data[2][1] - data[2][2] * data[3][1]);
 
-    coefficient[0][1] = matrix[1][0] * (matrix[3][3] * matrix[2][2] - matrix[2][3] * matrix[3][2]) -
-                        matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0]) +
-                        matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0]);
+    coefficient[0][1] = data[1][0] * (data[3][3] * data[2][2] - data[2][3] * data[3][2]) -
+                        data[1][2] * (data[2][0] * data[3][3] - data[2][3] * data[3][0]) +
+                        data[1][3] * (data[2][0] * data[3][2] - data[2][2] * data[3][0]);
 
-    coefficient[0][2] = matrix[1][0] * (matrix[3][3] * matrix[2][1] - matrix[2][3] * matrix[3][1]) -
-                        matrix[1][1] * (matrix[3][3] * matrix[2][0] - matrix[2][3] * matrix[3][0]) +
-                        matrix[1][3] * (matrix[3][1] * matrix[2][0] - matrix[2][1] * matrix[3][0]);
+    coefficient[0][2] = data[1][0] * (data[3][3] * data[2][1] - data[2][3] * data[3][1]) -
+                        data[1][1] * (data[3][3] * data[2][0] - data[2][3] * data[3][0]) +
+                        data[1][3] * (data[3][1] * data[2][0] - data[2][1] * data[3][0]);
 
-    coefficient[0][3] = matrix[1][0] * (matrix[3][2] * matrix[2][1] - matrix[2][2] * matrix[3][1]) -
-                        matrix[1][1] * (matrix[3][2] * matrix[2][0] - matrix[2][2] * matrix[3][0]) +
-                        matrix[1][2] * (matrix[3][1] * matrix[2][0] - matrix[2][1] * matrix[3][0]);
+    coefficient[0][3] = data[1][0] * (data[3][2] * data[2][1] - data[2][2] * data[3][1]) -
+                        data[1][1] * (data[3][2] * data[2][0] - data[2][2] * data[3][0]) +
+                        data[1][2] * (data[3][1] * data[2][0] - data[2][1] * data[3][0]);
     /* ------------------------------------------------------------------------------------------------- */
 
     /* Row 1 ------------------------------------------------------------------------------------------- */
-    coefficient[1][0] = matrix[0][1] * (matrix[3][3] * matrix[2][2] - matrix[2][3] * matrix[3][2]) -
-                        matrix[0][2] * (matrix[3][3] * matrix[2][1] - matrix[2][3] * matrix[3][1]) +
-                        matrix[0][3] * (matrix[3][2] * matrix[2][1] - matrix[2][2] * matrix[3][1]);
+    coefficient[1][0] = data[0][1] * (data[3][3] * data[2][2] - data[2][3] * data[3][2]) -
+                        data[0][2] * (data[3][3] * data[2][1] - data[2][3] * data[3][1]) +
+                        data[0][3] * (data[3][2] * data[2][1] - data[2][2] * data[3][1]);
 
-    coefficient[1][1] = matrix[0][0] * (matrix[3][3] * matrix[2][2] - matrix[2][3] * matrix[3][2]) -
-                        matrix[0][2] * (matrix[3][3] * matrix[2][0] - matrix[2][3] * matrix[3][0]) +
-                        matrix[0][3] * (matrix[3][2] * matrix[2][0] - matrix[2][2] * matrix[3][0]);
+    coefficient[1][1] = data[0][0] * (data[3][3] * data[2][2] - data[2][3] * data[3][2]) -
+                        data[0][2] * (data[3][3] * data[2][0] - data[2][3] * data[3][0]) +
+                        data[0][3] * (data[3][2] * data[2][0] - data[2][2] * data[3][0]);
 
-    coefficient[1][2] = matrix[0][0] * (matrix[3][3] * matrix[2][1] - matrix[2][3] * matrix[3][1]) -
-                        matrix[0][1] * (matrix[3][3] * matrix[2][0] - matrix[2][3] * matrix[3][0]) +
-                        matrix[0][3] * (matrix[3][1] * matrix[2][0] - matrix[2][1] * matrix[3][0]);
+    coefficient[1][2] = data[0][0] * (data[3][3] * data[2][1] - data[2][3] * data[3][1]) -
+                        data[0][1] * (data[3][3] * data[2][0] - data[2][3] * data[3][0]) +
+                        data[0][3] * (data[3][1] * data[2][0] - data[2][1] * data[3][0]);
 
-    coefficient[1][3] = matrix[0][0] * (matrix[3][2] * matrix[2][1] - matrix[2][2] * matrix[3][1]) -
-                        matrix[0][1] * (matrix[3][2] * matrix[2][0] - matrix[2][2] * matrix[3][0]) +
-                        matrix[0][2] * (matrix[3][1] * matrix[2][0] - matrix[2][1] * matrix[3][0]);
+    coefficient[1][3] = data[0][0] * (data[3][2] * data[2][1] - data[2][2] * data[3][1]) -
+                        data[0][1] * (data[3][2] * data[2][0] - data[2][2] * data[3][0]) +
+                        data[0][2] * (data[3][1] * data[2][0] - data[2][1] * data[3][0]);
     /* ------------------------------------------------------------------------------------------------- */
 
     /* Row 2 ------------------------------------------------------------------------------------------- */
-    coefficient[2][0] = matrix[0][1] * (matrix[3][3] * matrix[1][2] - matrix[1][3] * matrix[3][2]) -
-                        matrix[0][2] * (matrix[3][3] * matrix[1][1] - matrix[1][3] * matrix[3][1]) +
-                        matrix[0][3] * (matrix[3][2] * matrix[1][1] - matrix[1][2] * matrix[3][1]);
+    coefficient[2][0] = data[0][1] * (data[3][3] * data[1][2] - data[1][3] * data[3][2]) -
+                        data[0][2] * (data[3][3] * data[1][1] - data[1][3] * data[3][1]) +
+                        data[0][3] * (data[3][2] * data[1][1] - data[1][2] * data[3][1]);
 
-    coefficient[2][1] = matrix[0][0] * (matrix[3][3] * matrix[1][2] - matrix[1][3] * matrix[3][2]) -
-                        matrix[0][2] * (matrix[3][3] * matrix[1][0] - matrix[1][3] * matrix[3][0]) +
-                        matrix[0][3] * (matrix[3][2] * matrix[1][0] - matrix[1][2] * matrix[3][0]);
+    coefficient[2][1] = data[0][0] * (data[3][3] * data[1][2] - data[1][3] * data[3][2]) -
+                        data[0][2] * (data[3][3] * data[1][0] - data[1][3] * data[3][0]) +
+                        data[0][3] * (data[3][2] * data[1][0] - data[1][2] * data[3][0]);
 
-    coefficient[2][2] = matrix[0][0] * (matrix[3][3] * matrix[1][1] - matrix[1][3] * matrix[3][1]) -
-                        matrix[0][1] * (matrix[3][3] * matrix[1][0] - matrix[1][3] * matrix[3][0]) +
-                        matrix[0][3] * (matrix[3][1] * matrix[1][0] - matrix[1][1] * matrix[3][0]);
+    coefficient[2][2] = data[0][0] * (data[3][3] * data[1][1] - data[1][3] * data[3][1]) -
+                        data[0][1] * (data[3][3] * data[1][0] - data[1][3] * data[3][0]) +
+                        data[0][3] * (data[3][1] * data[1][0] - data[1][1] * data[3][0]);
 
-    coefficient[2][3] = matrix[0][0] * (matrix[3][2] * matrix[1][1] - matrix[1][2] * matrix[3][1]) -
-                        matrix[0][1] * (matrix[3][2] * matrix[1][0] - matrix[1][2] * matrix[3][0]) +
-                        matrix[0][2] * (matrix[3][1] * matrix[1][0] - matrix[1][1] * matrix[3][0]);
+    coefficient[2][3] = data[0][0] * (data[3][2] * data[1][1] - data[1][2] * data[3][1]) -
+                        data[0][1] * (data[3][2] * data[1][0] - data[1][2] * data[3][0]) +
+                        data[0][2] * (data[3][1] * data[1][0] - data[1][1] * data[3][0]);
     /* ------------------------------------------------------------------------------------------------- */
 
     /* Row 3 ------------------------------------------------------------------------------------------- */
-    coefficient[3][0] = matrix[0][1] * (matrix[2][3] * matrix[1][2] - matrix[1][3] * matrix[2][2]) -
-                        matrix[0][2] * (matrix[2][3] * matrix[1][1] - matrix[1][3] * matrix[2][1]) +
-                        matrix[0][3] * (matrix[2][2] * matrix[1][1] - matrix[1][2] * matrix[2][1]);
+    coefficient[3][0] = data[0][1] * (data[2][3] * data[1][2] - data[1][3] * data[2][2]) -
+                        data[0][2] * (data[2][3] * data[1][1] - data[1][3] * data[2][1]) +
+                        data[0][3] * (data[2][2] * data[1][1] - data[1][2] * data[2][1]);
 
-    coefficient[3][1] = matrix[0][0] * (matrix[2][3] * matrix[1][2] - matrix[1][3] * matrix[2][2]) -
-                        matrix[0][2] * (matrix[2][3] * matrix[1][0] - matrix[1][3] * matrix[2][0]) +
-                        matrix[0][3] * (matrix[2][2] * matrix[1][0] - matrix[1][2] * matrix[2][0]);
+    coefficient[3][1] = data[0][0] * (data[2][3] * data[1][2] - data[1][3] * data[2][2]) -
+                        data[0][2] * (data[2][3] * data[1][0] - data[1][3] * data[2][0]) +
+                        data[0][3] * (data[2][2] * data[1][0] - data[1][2] * data[2][0]);
 
-    coefficient[3][2] = matrix[0][0] * (matrix[2][3] * matrix[1][3] - matrix[1][3] * matrix[2][1]) -
-                        matrix[0][1] * (matrix[2][3] * matrix[1][0] - matrix[1][3] * matrix[2][0]) +
-                        matrix[0][3] * (matrix[2][1] * matrix[1][0] - matrix[1][1] * matrix[2][0]);
+    coefficient[3][2] = data[0][0] * (data[2][3] * data[1][3] - data[1][3] * data[2][1]) -
+                        data[0][1] * (data[2][3] * data[1][0] - data[1][3] * data[2][0]) +
+                        data[0][3] * (data[2][1] * data[1][0] - data[1][1] * data[2][0]);
 
-    coefficient[3][3] = matrix[0][0] * (matrix[2][2] * matrix[1][1] - matrix[1][2] * matrix[2][1]) -
-                        matrix[0][1] * (matrix[2][2] * matrix[1][0] - matrix[1][2] * matrix[2][0]) +
-                        matrix[0][2] * (matrix[2][1] * matrix[1][0] - matrix[1][1] * matrix[2][0]);
+    coefficient[3][3] = data[0][0] * (data[2][2] * data[1][1] - data[1][2] * data[2][1]) -
+                        data[0][1] * (data[2][2] * data[1][0] - data[1][2] * data[2][0]) +
+                        data[0][2] * (data[2][1] * data[1][0] - data[1][1] * data[2][0]);
     /* ------------------------------------------------------------------------------------------------- */
 
     coefficient.transpose();

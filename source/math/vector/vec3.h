@@ -1,6 +1,8 @@
 #ifndef HELIOS_VEC3_H
 #define HELIOS_VEC3_H
 
+class Mat4;
+
 class Vec3 {
 public:
     float x = 0;
@@ -19,6 +21,8 @@ public:
     void normalize();
 
     Vec3 normalized();
+
+    void transform(const Mat4 &matrix);
 };
 
 /**

@@ -5,7 +5,7 @@
 
 class Sphere : public Drawable {
 protected:
-    double radius = 0;
+    float radius = 0;
 
 public:
     Sphere() = default;
@@ -13,7 +13,7 @@ public:
     Sphere(const Vec3 &position, double radius) : Drawable(position), radius(radius)
     { };
 
-    void intersect(const Ray &ray, HitPoint *hit_point);
+    bool intersect(const Ray &ray, HitPoint *hit_point);
 };
 
 #endif //HELIOS_SPHERE_H

@@ -8,7 +8,7 @@ public:
     Collidable(const Vec3 &position) : Object(position)
     { }
 
-    virtual void intersect(const Ray &ray, HitPoint *hit_point) = 0;
+    virtual bool intersect(const Ray &ray, HitPoint *hit_point) = 0;
 };
 
 #endif //HELIOS_COLLIDABLE_H

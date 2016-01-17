@@ -14,7 +14,7 @@ public:
 
     Box(const Vec3 &position, double length, double width, double height);
 
-    void intersect(const Ray &ray, HitPoint *hit_point);
+    bool intersect(const Ray &ray, HitPoint *hit_point);
 };
 
 #endif //HELIOS_BOX_H

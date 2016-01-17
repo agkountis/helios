@@ -11,7 +11,7 @@ const Vec3 &Plane::get_normal() const
     return normal;
 }
 
-void Plane::intersect(const Ray &ray, HitPoint *hit_point)
+bool Plane::intersect(const Ray &ray, HitPoint *hit_point)
 {
     //ray -> x = orig - dir * t
     //plane -> x = (dot(ray.orig, normal) + d) / dot(ray.dir, normal)
@@ -28,13 +28,13 @@ void Plane::intersect(const Ray &ray, HitPoint *hit_point)
      * Ray parallel to the plane. No intersection
      */
     if(n_dot_rdir == 0)
-        return;
+        return false;
 
     /**
      * Plane faces away from the ray. The plane is culled.
      */
-    if(n_dot_rdir > 0)
-        return;
+    if(n_dot_rdir > 0.0001)
+        return false;
 
 
     float t = -(dot(normal, ray.origin) + d) / n_dot_rdir;
@@ -43,10 +43,12 @@ void Plane::intersect(const Ray &ray, HitPoint *hit_point)
      * Intersection point is behind the ray. No real intersections.
      */
     if (t < 0)
-        return;
+        return false;
 
     hit_point->position = ray.origin + ray.direction * t;
     hit_point->normal = normal;
     hit_point->distance = t;
     hit_point->object = this;
+
+    return true;
 }

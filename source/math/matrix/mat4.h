@@ -5,10 +5,10 @@
 
 class Mat4 {
 private:
-    float matrix[4][4] = {{1.0, 0.0, 0.0, 0.0},
-                           {0.0, 1.0, 0.0, 0.0},
-                           {0.0, 0.0, 1.0, 0.0},
-                           {0.0, 0.0, 0.0, 1.0}};
+    float data[4][4] = {{1.0, 0.0, 0.0, 0.0},
+                        {0.0, 1.0, 0.0, 0.0},
+                        {0.0, 0.0, 1.0, 0.0},
+                        {0.0, 0.0, 0.0, 1.0}};
 
 public:
     Mat4() = default;
@@ -44,8 +44,11 @@ public:
 
     Mat4 inverse() const;
 
-    inline float *operator[](unsigned int i)
-    { return matrix[i]; }
+    inline float *operator[](const unsigned int index)
+    { return data[index]; }
+
+    inline const float *operator[](const unsigned int index) const
+    { return data[index]; }
 
     friend Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2);
 
@@ -54,8 +57,8 @@ public:
     inline void operator=(const Mat4 &mat2)
     {
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j <  4; j++) {
-                matrix[i][j] = mat2.matrix[i][j];
+            for (int j = 0; j < 4; j++) {
+                data[i][j] = mat2.data[i][j];
             }
         }
     }
@@ -65,56 +68,56 @@ inline Mat4 operator*(const Mat4 &mat1, const Mat4 &mat2)
 {
     Mat4 res;
 
-    res.matrix[0][0] = mat1.matrix[0][0] * mat2.matrix[0][0] + mat1.matrix[0][1] * mat2.matrix[1][0]
-                       + mat1.matrix[0][2] * mat2.matrix[2][0] + mat1.matrix[0][3] * mat2.matrix[3][0];
+    res.data[0][0] = mat1.data[0][0] * mat2.data[0][0] + mat1.data[0][1] * mat2.data[1][0]
+                     + mat1.data[0][2] * mat2.data[2][0] + mat1.data[0][3] * mat2.data[3][0];
 
-    res.matrix[0][1] = mat1.matrix[0][0] * mat2.matrix[0][1] + mat1.matrix[0][1] * mat2.matrix[1][1]
-                       + mat1.matrix[0][2] * mat2.matrix[2][1] + mat1.matrix[0][3] * mat2.matrix[3][1];
+    res.data[0][1] = mat1.data[0][0] * mat2.data[0][1] + mat1.data[0][1] * mat2.data[1][1]
+                     + mat1.data[0][2] * mat2.data[2][1] + mat1.data[0][3] * mat2.data[3][1];
 
-    res.matrix[0][2] = mat1.matrix[0][0] * mat2.matrix[0][2] + mat1.matrix[0][1] * mat2.matrix[1][2]
-                       + mat1.matrix[0][2] * mat2.matrix[2][2] + mat1.matrix[0][3] * mat2.matrix[3][2];
+    res.data[0][2] = mat1.data[0][0] * mat2.data[0][2] + mat1.data[0][1] * mat2.data[1][2]
+                     + mat1.data[0][2] * mat2.data[2][2] + mat1.data[0][3] * mat2.data[3][2];
 
-    res.matrix[0][3] = mat1.matrix[0][0] * mat2.matrix[0][3] + mat1.matrix[0][1] * mat2.matrix[1][3]
-                       + mat1.matrix[0][2] * mat2.matrix[2][3] + mat1.matrix[0][3] * mat2.matrix[3][3];
-
-
-    res.matrix[1][0] = mat1.matrix[1][0] * mat2.matrix[0][0] + mat1.matrix[1][1] * mat2.matrix[1][0]
-                       + mat1.matrix[1][2] * mat2.matrix[2][0] + mat1.matrix[1][3] * mat2.matrix[3][0];
-
-    res.matrix[1][1] = mat1.matrix[1][0] * mat2.matrix[0][1] + mat1.matrix[1][1] * mat2.matrix[1][1]
-                       + mat1.matrix[1][2] * mat2.matrix[2][1] + mat1.matrix[1][3] * mat2.matrix[3][1];
-
-    res.matrix[1][2] = mat1.matrix[1][0] * mat2.matrix[0][2] + mat1.matrix[1][1] * mat2.matrix[1][2]
-                       + mat1.matrix[1][2] * mat2.matrix[2][2] + mat1.matrix[1][3] * mat2.matrix[3][2];
-
-    res.matrix[1][3] = mat1.matrix[1][0] * mat2.matrix[0][3] + mat1.matrix[1][1] * mat2.matrix[1][3]
-                       + mat1.matrix[1][2] * mat2.matrix[2][3] + mat1.matrix[1][3] * mat2.matrix[3][3];
+    res.data[0][3] = mat1.data[0][0] * mat2.data[0][3] + mat1.data[0][1] * mat2.data[1][3]
+                     + mat1.data[0][2] * mat2.data[2][3] + mat1.data[0][3] * mat2.data[3][3];
 
 
-    res.matrix[2][0] = mat1.matrix[2][0] * mat2.matrix[0][0] + mat1.matrix[2][1] * mat2.matrix[1][0]
-                       + mat1.matrix[2][2] * mat2.matrix[2][0] + mat1.matrix[2][3] * mat2.matrix[3][0];
+    res.data[1][0] = mat1.data[1][0] * mat2.data[0][0] + mat1.data[1][1] * mat2.data[1][0]
+                     + mat1.data[1][2] * mat2.data[2][0] + mat1.data[1][3] * mat2.data[3][0];
 
-    res.matrix[2][1] = mat1.matrix[2][0] * mat2.matrix[0][1] + mat1.matrix[2][1] * mat2.matrix[1][1]
-                       + mat1.matrix[2][2] * mat2.matrix[2][1] + mat1.matrix[2][3] * mat2.matrix[3][1];
+    res.data[1][1] = mat1.data[1][0] * mat2.data[0][1] + mat1.data[1][1] * mat2.data[1][1]
+                     + mat1.data[1][2] * mat2.data[2][1] + mat1.data[1][3] * mat2.data[3][1];
 
-    res.matrix[2][2] = mat1.matrix[2][0] * mat2.matrix[0][2] + mat1.matrix[2][1] * mat2.matrix[1][2]
-                       + mat1.matrix[2][2] * mat2.matrix[2][2] + mat1.matrix[2][3] * mat2.matrix[3][2];
+    res.data[1][2] = mat1.data[1][0] * mat2.data[0][2] + mat1.data[1][1] * mat2.data[1][2]
+                     + mat1.data[1][2] * mat2.data[2][2] + mat1.data[1][3] * mat2.data[3][2];
 
-    res.matrix[2][3] = mat1.matrix[2][0] * mat2.matrix[0][3] + mat1.matrix[2][1] * mat2.matrix[1][3]
-                       + mat1.matrix[2][2] * mat2.matrix[2][3] + mat1.matrix[2][3] * mat2.matrix[3][3];
+    res.data[1][3] = mat1.data[1][0] * mat2.data[0][3] + mat1.data[1][1] * mat2.data[1][3]
+                     + mat1.data[1][2] * mat2.data[2][3] + mat1.data[1][3] * mat2.data[3][3];
 
 
-    res.matrix[3][0] = mat1.matrix[3][0] * mat2.matrix[0][0] + mat1.matrix[3][1] * mat2.matrix[1][0]
-                       + mat1.matrix[3][2] * mat2.matrix[2][0] + mat1.matrix[3][3] * mat2.matrix[3][0];
+    res.data[2][0] = mat1.data[2][0] * mat2.data[0][0] + mat1.data[2][1] * mat2.data[1][0]
+                     + mat1.data[2][2] * mat2.data[2][0] + mat1.data[2][3] * mat2.data[3][0];
 
-    res.matrix[3][1] = mat1.matrix[3][0] * mat2.matrix[0][1] + mat1.matrix[3][1] * mat2.matrix[1][1]
-                       + mat1.matrix[3][2] * mat2.matrix[2][1] + mat1.matrix[3][3] * mat2.matrix[3][1];
+    res.data[2][1] = mat1.data[2][0] * mat2.data[0][1] + mat1.data[2][1] * mat2.data[1][1]
+                     + mat1.data[2][2] * mat2.data[2][1] + mat1.data[2][3] * mat2.data[3][1];
 
-    res.matrix[3][2] = mat1.matrix[3][0] * mat2.matrix[0][2] + mat1.matrix[3][1] * mat2.matrix[1][2]
-                       + mat1.matrix[3][2] * mat2.matrix[2][2] + mat1.matrix[3][3] * mat2.matrix[3][2];
+    res.data[2][2] = mat1.data[2][0] * mat2.data[0][2] + mat1.data[2][1] * mat2.data[1][2]
+                     + mat1.data[2][2] * mat2.data[2][2] + mat1.data[2][3] * mat2.data[3][2];
 
-    res.matrix[3][3] = mat1.matrix[3][0] * mat2.matrix[0][3] + mat1.matrix[3][1] * mat2.matrix[1][3]
-                       + mat1.matrix[3][2] * mat2.matrix[2][3] + mat1.matrix[3][3] * mat2.matrix[3][3];
+    res.data[2][3] = mat1.data[2][0] * mat2.data[0][3] + mat1.data[2][1] * mat2.data[1][3]
+                     + mat1.data[2][2] * mat2.data[2][3] + mat1.data[2][3] * mat2.data[3][3];
+
+
+    res.data[3][0] = mat1.data[3][0] * mat2.data[0][0] + mat1.data[3][1] * mat2.data[1][0]
+                     + mat1.data[3][2] * mat2.data[2][0] + mat1.data[3][3] * mat2.data[3][0];
+
+    res.data[3][1] = mat1.data[3][0] * mat2.data[0][1] + mat1.data[3][1] * mat2.data[1][1]
+                     + mat1.data[3][2] * mat2.data[2][1] + mat1.data[3][3] * mat2.data[3][1];
+
+    res.data[3][2] = mat1.data[3][0] * mat2.data[0][2] + mat1.data[3][1] * mat2.data[1][2]
+                     + mat1.data[3][2] * mat2.data[2][2] + mat1.data[3][3] * mat2.data[3][2];
+
+    res.data[3][3] = mat1.data[3][0] * mat2.data[0][3] + mat1.data[3][1] * mat2.data[1][3]
+                     + mat1.data[3][2] * mat2.data[2][3] + mat1.data[3][3] * mat2.data[3][3];
 
     return res;
 }
@@ -123,8 +126,8 @@ inline Mat4 operator*(Mat4 &mat, float scalar)
 {
     Mat4 res;
     for (int i = 0; i < 4; i++) {
-        for(int j = 0; j < 4; j++) {
-            res[i][j] = mat.matrix[i][j] * scalar;
+        for (int j = 0; j < 4; j++) {
+            res[i][j] = mat.data[i][j] * scalar;
         }
     }
 

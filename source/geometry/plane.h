@@ -18,7 +18,7 @@ public:
 
     const Vec3 &get_normal() const;
 
-    void intersect(const Ray &ray, HitPoint *hit_point);
+    bool intersect(const Ray &ray, HitPoint *hit_point);
 };
 
 #endif //HELIOS_PLANE_H

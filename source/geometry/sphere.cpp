@@ -1,7 +1,7 @@
 #include "sphere.h"
 #include <math.h>
 
-void Sphere::intersect(const Ray &ray, HitPoint *hit_point)
+bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
 {
     /**
      * sphere vector equation is |x - position| = radius
@@ -17,28 +17,28 @@ void Sphere::intersect(const Ray &ray, HitPoint *hit_point)
      *  C = (origin - position)^2 - radius^2
      */
 
-    double a = dot(ray.direction, ray.direction);
+    float a = dot(ray.direction, ray.direction);
 
-    double b = 2 * ray.direction.x * (ray.origin.x - position.x) +
-                2 * ray.direction.y * (ray.origin.y - position.y) +
-                2 * ray.direction.z * (ray.origin.z - position.z);
+    float b = 2.0f * ray.direction.x * (ray.origin.x - position.x) +
+                2.0f * ray.direction.y * (ray.origin.y - position.y) +
+                2.0f * ray.direction.z * (ray.origin.z - position.z);
 
-    double c = dot(ray.origin, ray.origin) + dot(position, position) - 2 * dot(ray.origin, position) - radius * radius;
+    float c = dot(ray.origin, ray.origin) + dot(position, position) - 2.0f * dot(ray.origin, position) - radius * radius;
 
 
-    double disc = b * b - (4.0 * a * c);
+    float disc = b * b - (4.0f * a * c);
 
     /**
      * If the discriminant is < 0 we have no intersection.
      */
     if (disc < 1e-4)
-        return;
+        return false;
 
-    double disc_sqrt = sqrt(disc);
+    float disc_sqrt = (float) sqrt(disc);
 
-    double t0 = (-b + disc_sqrt) / (2.0 * a);
+    float t0 = (-b + disc_sqrt) / (2.0f * a);
 
-    double t1 = (-b - disc_sqrt) / (2.0 * a);
+    float t1 = (-b - disc_sqrt) / (2.0f * a);
 
 
     /**
@@ -50,13 +50,13 @@ void Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     if (t1 < 1e-4)
         t1 = t0;
 
-    double t = t0 < t1 ? t0 : t1;
+    float t = t0 < t1 ? t0 : t1;
 
     /**
      * If both solutions turn out to be negative we have no intersection.
      */
     if (t < 1e-4)
-        return;
+        return false;
 
     /**
      * We have a hit!
@@ -67,4 +67,6 @@ void Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     hit_point->distance = t;
 
     hit_point->normal = (hit_point->position - position) / radius;
+
+    return true;
 }
