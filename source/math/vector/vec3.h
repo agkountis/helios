@@ -90,11 +90,12 @@ inline float dot(const Vec3 &vec1, const Vec3 &vec2)
 inline Vec3 cross(const Vec3 &vec1, const Vec3 &vec2)
 {
     return Vec3(vec1.y * vec2.z - vec1.z * vec2.y, vec1.z * vec2.x - vec1.x * vec2.z,
-                vec1.x * vec2.y - vec1.y * vec2.z);
+                vec1.x * vec2.y - vec1.y * vec2.x);
 }
 
 inline Vec3 reflect(const Vec3 &vec, const Vec3 &normal)
 {
+    // use this so that we won't have to negate the result later normal - 2 * dot(vec, normal) * vec
     return vec - 2 * dot(vec, normal) * normal;
 }
 

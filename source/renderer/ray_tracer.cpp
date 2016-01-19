@@ -2,6 +2,7 @@
 #include <math.h>
 #include <material.h>
 #include <drawable.h>
+#include <limits>
 #include "ray_tracer.h"
 
 RayTracer::~RayTracer()
@@ -149,6 +150,8 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
     /**
      * The ray origin is at 0 0 0 so we don't touch it.
      */
+    //ray.origin = camera.get_position();
+
     ray.direction.x = (2.0f * (float) pixel_x / (float) image_width - 1.0f) * aspect;
     ray.direction.y = 1.0f - 2.0f * (float) pixel_y / (float) image_height;
     ray.direction.z = 1.0f / (float) tan(camera_fov / 2.0f);

@@ -8,7 +8,7 @@ void Ray::transform(const Mat4 &matrix)
      */
     Mat4 direction_matrix = matrix;
     direction_matrix[3][0] = direction_matrix[3][1] = direction_matrix[3][2] = 0.0f;
-//
-//    origin.transform(matrix);
-//    direction.transform(direction_matrix);
+
+    origin.transform(matrix);
+    direction.transform(direction_matrix);
 }

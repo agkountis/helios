@@ -7,7 +7,7 @@
 
 class Camera : public Object {
 private:
-    Vec3 target;
+    Vec3 target = Vec3(0.0f, 0.0f, 1.0f);
 
     Mat4 transformation;
 
