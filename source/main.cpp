@@ -12,23 +12,24 @@ int main(int argc, char **argv)
     sphere->material.diffuse_color = Vec3(0.2f, 0.5f, 0.0f);
     sphere->material.specular_color = Vec3(1.0f, 1.0f, 1.0f);
     sphere->material.shininess = 60.0f;
-    sphere->material.reflectivity = 0.0;
+    sphere->material.reflectivity = 1.0;
 
     Drawable *sphere1 = new Sphere(Vec3(2.0, 0.1f, 4.0f), 0.5);
     sphere1->material.diffuse_color = Vec3(1.0f, 0.5f, 0.0f);
     sphere1->material.specular_color = Vec3(1.0f, 1.0f, 1.0f);
     sphere1->material.shininess = 60.0f;
-    sphere1->material.reflectivity = 0.0;
+    sphere1->material.reflectivity = 1.0;
 
 
     Drawable *plane = new Plane(Vec3(0.0f, -1.0f, 0.0f), Vec3(0, 1, 0));
-    plane->material.diffuse_color = Vec3(1.0f, 0.0, 0.0);
+    plane->material.diffuse_color = Vec3(0.3f, 0.1, 0.2);
     plane->material.specular_color = Vec3(1.0, 1.0, 1.0);
-    plane->material.shininess = 60.0;
+    plane->material.shininess = 100.0;
+    plane->material.reflectivity = 1.0f;
 
     Camera camera;
-    camera.set_position(Vec3(0.0, 0.0, 0.0));
-    camera.set_target(Vec3(0.0, 0.0, 1.f));
+    camera.set_position(Vec3(0.0, 0.0, 0.0f));
+    camera.set_target(Vec3(0.0, 0.0f, 4));
     camera.set_fov(80.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;

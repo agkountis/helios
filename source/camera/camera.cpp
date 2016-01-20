@@ -38,23 +38,25 @@ const Mat4 &Camera::get_transformation_matrix()
      * Assume the up camera vector points towards the positive y axis.
      */
     Vec3 up(0.0f, 1.0f, 0.0f);
-    Vec3 right = cross(camera_dir, up);
+    Vec3 right = cross(up, camera_dir);
     right.normalize();
 
     /**
      * Compute the actual up vector.
      */
-    up = cross(right, camera_dir);
+    up = cross(camera_dir, right);
     //up.normalize();
 
     /**
      * Create the correct camera matrix.
      */
     //TODO: FIX THE LOOK-AT MATRIX.
-    transformation = Mat4(right.x, right.y, right.z, position.x,
-                          up.x, up.y, up.z, position.y,
-                          camera_dir.x, camera_dir.y, camera_dir.z, position.z,
+    transformation = Mat4(right.x, right.y, right.z, 0,
+                          up.x, up.y, up.z, 0,
+                          camera_dir.x, camera_dir.y, camera_dir.z, 0,
                           0, 0, 0, 1);
+
+    transformation.translate(position);
 
     return transformation;
 }

@@ -11,7 +11,7 @@ protected:
 
     Image image;
 
-    static const int max_iterations = 5;
+    static const int max_iterations = 100;
 
     Vec3 shade(const Ray &ray, HitPoint *hit_point, int iterations);
 

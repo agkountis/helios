@@ -97,7 +97,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
     }
 
     if (material.reflectivity > 0.0001) {
-        Ray reflection_ray = Ray(hit_point->position, reflect(-ray.direction, hit_point->normal));
+        Ray reflection_ray = Ray(hit_point->position, reflect(ray.direction, hit_point->normal));
         color = color + trace_ray(reflection_ray, iterations + 1) * material.reflectivity;
     }
 
@@ -113,7 +113,7 @@ Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 
 
     if (!nearest.object || iterations > max_iterations) {
-        return Vec3(0.3, 0.3, 0.3);
+        return Vec3(0.0, 0.0, 0.0);
     }
 
     Vec3 color = shade(ray, &nearest, iterations);
