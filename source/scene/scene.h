@@ -5,9 +5,9 @@
 #include <object.h>
 #include <string>
 #include <camera.h>
-#include <collidable.h>
 #include <drawable.h>
-#include "../light/light.h"
+#include <light.h>
+
 
 class Scene {
 private:

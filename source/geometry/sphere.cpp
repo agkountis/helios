@@ -6,7 +6,7 @@ bool Sphere::intersect(const Ray &ray, HitPoint *hit_point)
     /**
      * sphere vector equation is |x - position| = radius
      * can also be written as (x - position) * (x - position) = radius^2
-     * the ray equation is x = pos - dir * t;
+     * the ray equation is x = origin - direction * t;
      * replacing x into the sphere equation we get
      * (origin - direction * t - position) * (origin - direction * t - position) = radius^2
      *

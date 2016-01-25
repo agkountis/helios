@@ -125,7 +125,7 @@ Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
 {
     for (unsigned int i = 0; i < scene->get_drawable_count(); i++) {
-        Collidable *obj = scene->get_drawable(i);
+        Drawable *obj = scene->get_drawable(i);
 
         HitPoint pt;
 
