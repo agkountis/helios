@@ -45,7 +45,7 @@ const Mat4 &Camera::get_transformation_matrix()
      * Compute the actual up vector.
      */
     up = cross(camera_dir, right);
-    //up.normalize();
+    up.normalize();
 
     /**
      * Create the correct camera matrix.

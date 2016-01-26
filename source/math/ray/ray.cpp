@@ -11,4 +11,5 @@ void Ray::transform(const Mat4 &matrix)
 
     origin.transform(matrix);
     direction.transform(direction_matrix);
+    direction.normalize();
 }

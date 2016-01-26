@@ -32,8 +32,8 @@ void RayTracer::render()
     /**
      * Work with scan-lines for now.
      */
-    for (int x = 0; x < image.get_height(); x++) {
-        for (int y = 0; y < image.get_width(); y++) {
+    for (int x = 0; x < (int) image.get_height(); x++) {
+        for (int y = 0; y < (int) image.get_width(); y++) {
 
 //            if(x == (image.get_height() / 2) && y == (image.get_width() / 2)) {
 //                asm volatile("int $3\n");
@@ -110,7 +110,6 @@ Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
     nearest.distance = std::numeric_limits<float>::max();
 
     find_intersection(ray, &nearest);
-
 
     if (!nearest.object || iterations > max_iterations) {
         return Vec3(0.0, 0.0, 0.0);
