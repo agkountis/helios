@@ -52,31 +52,43 @@ void Mat4::set_column_vector(float x, float y, float z, float w, unsigned int co
 
 void Mat4::translate(float x, float y, float z)
 {
-    data[0][3] += x;
-    data[1][3] += y;
-    data[2][3] += z;
+    Mat4 translation_mat(1.0f, 0.0f, 0.0f, x,
+                         0.0f, 1.0f, 0.0f, y,
+                         0.0f, 0.0f, 1.0f, z,
+                         0.0f, 0.0f, 0.0f, 1.0f);
+
+    *this = *this * translation_mat;
 }
 
 void Mat4::translate(const Vec3 &position)
 {
-    data[0][3] += position.x;
-    data[1][3] += position.y;
-    data[2][3] += position.z;
+    Mat4 translation_mat(1.0f, 0.0f, 0.0f, position.x,
+                         0.0f, 1.0f, 0.0f, position.y,
+                         0.0f, 0.0f, 1.0f, position.z,
+                         0.0f, 0.0f, 0.0f, 1.0f);
+
+    *this = *this * translation_mat;
 }
 
 
 void Mat4::scale(float x, float y, float z)
 {
-    data[0][0] *= x;
-    data[1][1] *= y;
-    data[2][2] *= z;
+    Mat4 scale_mat(x, 0.0f, 0.0f, 0.0f,
+                   0.0f, y, 0.0f, 0.0f,
+                   0.0f, 0.0f, z, 0.0f,
+                   0.0f, 0.0f, 0.0f, 1.0f);
+
+    *this = *this * scale_mat;
 }
 
 void Mat4::scale(const Vec3 &scale)
 {
-    data[0][0] *= scale.x;
-    data[1][1] *= scale.y;
-    data[2][2] *= scale.z;
+    Mat4 scale_mat(scale.x, 0.0f, 0.0f, 0.0f,
+                   0.0f, scale.y, 0.0f, 0.0f,
+                   0.0f, 0.0f, scale.z, 0.0f,
+                   0.0f, 0.0f, 0.0f, 1.0f);
+
+    *this = *this * scale_mat;
 }
 
 

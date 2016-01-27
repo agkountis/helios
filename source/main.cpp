@@ -28,8 +28,8 @@ int main(int argc, char **argv)
 
 
     Drawable *plane = new Plane(Vec3(0.0f, -1.0f, 0.0f), Vec3(0, 1, 0));
-    plane->material.diffuse_color = Vec3(0.3f, 0.1, 0.2);
-    plane->material.specular_color = Vec3(1.0, 1.0, 1.0);
+    plane->material.diffuse_color = Vec3(0.0f, 0.0, 0.0);
+    plane->material.specular_color = Vec3(0.0, 0.0, 0.0);
     plane->material.shininess = 100.0;
     plane->material.reflectivity = 1.0f;
 
@@ -50,6 +50,7 @@ int main(int argc, char **argv)
     plane4->material.specular_color = Vec3(0.0, 0.0, 0.0);
     plane4->material.shininess = 200.0;
     plane4->material.reflectivity = 1.0f;
+
 
     Camera camera;
     camera.set_position(Vec3(0.0, 0.0, 0.0f));
@@ -82,7 +83,7 @@ int main(int argc, char **argv)
     scene->add_light(lt2);
 
     Image image;
-    image.create(2048, 1024);
+    image.create(1024, 768);
 
     Renderer *renderer = new RayTracer(scene, image);
 
