@@ -39,14 +39,14 @@ bool Image::save_as_ppm(const std::string &file_name)
     /**
      * Write the .ppm file header.
      */
-    file << "P6" << std::endl;
-    file << width << " " << height << std::endl;
-    file << max_color_value << std::endl;
+    file << "P6\n"
+    << width << " " << height << "\n"
+    << max_color_value << std::endl;
 
     /**
      * Write the values to the file.
      */
-    for (int i = 0; i < width * height * 3; i += 3) {
+    for (int i = 0; i < (int)(width * height * 3); i += 3) {
 
         float r = pixels[i];
         float g = pixels[i + 1];
@@ -62,7 +62,6 @@ bool Image::save_as_ppm(const std::string &file_name)
 
     return true;
 }
-
 
 bool Image::save_auto_detect(const std::string &file_name)
 {
@@ -84,20 +83,24 @@ bool Image::create(unsigned int width, unsigned int height)
     delete[] pixels;
 
     try {
+        std::cout << "Creating Image: (" << width << " x " << height << ")" << std::endl;
+        std::cout << "Trying to allocate image memory!\n" << "Bytes needed: "
+        <<  width * height * 3 * sizeof(float) << std::endl;
+
         pixels = new float[width * height * 3];
     }
     catch (...) {
+        std::cerr << "Image allocation failed. Not enough memory!" << std::endl;
         return false;
     }
+
+    std::cout << "Image successfully created!" << std::endl;
 
     this->width = width;
     this->height = height;
 
-    std::cout << "Creating Image: (" << width << " x " << height << ")" << std::endl;
-
     return true;
 }
-
 
 unsigned int Image::get_width() const
 {
