@@ -11,13 +11,11 @@ set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h
         source/math/ray/ray.cpp source/geometry/box.h source/geometry/box.cpp source/math/matrix/mat4.h
         source/math/matrix/mat4.cpp source/scene/scene.h source/scene/scene.cpp source/image/image.h
         source/image/image.cpp source/camera/camera.h source/camera/camera.cpp
-        source/geometry/drawable.h source/light/light.h source/geometry/plane.h source/geometry/plane.cpp
-        source/math/quaternion/quaternion.h source/math/quaternion/quaternion.cpp)
+        source/geometry/drawable.h source/light/light.h source/geometry/plane.h source/geometry/plane.cpp)
 
 include_directories("source/math/vector")
 include_directories("source/math/ray")
 include_directories("source/math/matrix")
-include_directories("source/math/quaternion")
 include_directories("source/renderer")
 include_directories("source/geometry")
 include_directories("source/material")
