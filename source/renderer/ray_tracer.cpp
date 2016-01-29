@@ -50,11 +50,11 @@ void RayTracer::render()
     }
 }
 
-Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
+Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 {
     Vec3 color;
 
-    Material material = ((Drawable *) hit_point->object)->material;
+    Material material = ((Drawable *) hit_point.object)->material;
 
     Vec3 view_direction = -ray.direction;
 
@@ -65,7 +65,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
         /**
          * Create a shadow ray from the object hit point towards the current light in the loop.
          */
-        Ray shadow_ray(hit_point->position, (light->get_position() - hit_point->position).normalized());
+        Ray shadow_ray(hit_point.position, (light->get_position() - hit_point.position).normalized());
 
         HitPoint shadow_hit_point;
         shadow_hit_point.distance = std::numeric_limits<float>::max();
@@ -74,7 +74,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
          * Check for intersections with other objects.
          * If an intersection is found then the being shaded is obscured by another object thus it is in shadow.
          */
-        find_intersection(shadow_ray, &shadow_hit_point);
+        find_intersection(shadow_ray, shadow_hit_point);
 
         /**
          * If an object is hit skip lighting calculations.
@@ -82,12 +82,12 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
         if (shadow_hit_point.object && shadow_hit_point.distance < 1.0)
             continue;
 
-        Vec3 light_direction = light->get_position() - hit_point->position;
+        Vec3 light_direction = light->get_position() - hit_point.position;
         light_direction.normalize();
 
-        Vec3 reflection_vector = -reflect(view_direction, hit_point->normal);
+        Vec3 reflection_vector = -reflect(view_direction, hit_point.normal);
 
-        float diff_light = std::max(dot(light_direction, hit_point->normal), 0.0f);
+        float diff_light = std::max(dot(light_direction, hit_point.normal), 0.0f);
         float spec_light = (float) pow(std::max(dot(reflection_vector, light_direction), 0.0f), material.shininess);
 
         color = color + material.diffuse_color * diff_light;
@@ -97,7 +97,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint *hit_point, int iterations)
     }
 
     if (material.reflectivity > 0.0001) {
-        Ray reflection_ray = Ray(hit_point->position, reflect(ray.direction, hit_point->normal));
+        Ray reflection_ray = Ray(hit_point.position, reflect(ray.direction, hit_point.normal));
         color = color + trace_ray(reflection_ray, iterations + 1) * material.reflectivity;
     }
 
@@ -109,27 +109,27 @@ Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
     HitPoint nearest;
     nearest.distance = std::numeric_limits<float>::max();
 
-    find_intersection(ray, &nearest);
+    find_intersection(ray, nearest);
 
     if (!nearest.object || iterations > max_iterations) {
         return Vec3(0.0, 0.0, 0.0);
     }
 
-    Vec3 color = shade(ray, &nearest, iterations);
+    Vec3 color = shade(ray, nearest, iterations);
     image.tone_map_pixel(&color.x, &color.y, &color.z);
 
     return color;
 }
 
-void RayTracer::find_intersection(const Ray &ray, HitPoint *hit_point)
+void RayTracer::find_intersection(const Ray &ray, HitPoint &hit_point)
 {
     for (unsigned int i = 0; i < scene->get_drawable_count(); i++) {
         Drawable *obj = scene->get_drawable(i);
 
         HitPoint pt;
 
-        if (obj->intersect(ray, &pt) && pt.distance < hit_point->distance) {
-            *hit_point = pt;
+        if (obj->intersect(ray, &pt) && pt.distance < hit_point.distance) {
+            hit_point = pt;
         }
     }
 }

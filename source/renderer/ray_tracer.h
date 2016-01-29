@@ -13,11 +13,11 @@ protected:
 
     static const int max_iterations = 10;
 
-    Vec3 shade(const Ray &ray, HitPoint *hit_point, int iterations);
+    Vec3 shade(const Ray &ray, HitPoint &hit_point, int iterations);
 
     Vec3 trace_ray(const Ray &ray, int iterations = 0);
 
-    void find_intersection(const Ray &ray, HitPoint *hit_point);
+    void find_intersection(const Ray &ray, HitPoint &hit_point);
 
     Ray create_primary_ray(int pixel_x, int pixel_y) const;
 
