@@ -5,6 +5,7 @@
 #include <renderer.h>
 #include <ray_tracer.h>
 #include <plane.h>
+#include <thread_pool.h>
 
 int main(int argc, char **argv)
 {
@@ -84,6 +85,10 @@ int main(int argc, char **argv)
 
     Image image;
     image.create(1024, 768);
+
+    ThreadPool threadPool;
+
+    threadPool.init();
 
     Renderer *renderer = new RayTracer(scene, image);
 
