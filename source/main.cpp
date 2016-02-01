@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 
     ThreadPool threadPool;
 
-    threadPool.init();
+    threadPool.initialize();
 
     Renderer *renderer = new RayTracer(scene, image);
 
