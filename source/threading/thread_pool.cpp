@@ -60,11 +60,11 @@ bool ThreadPool::initialize()
     for (int i = 0; i < thread_count; i++) {
 
         /**
-         * The workers will execute an infinite loop function (using this lambda)
+         * The workers will execute an infinite loop function
          * and will wait for a job to enter the job queue. Once a job is in the the queue
          * the threads will wake up to acquire and execute it.
          */
-        workers.push_back(std::thread(wait_and_execute));
+        workers.emplace_back(&ThreadPool::wait_and_execute, this);
     }
 
     return true;
