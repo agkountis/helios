@@ -2,6 +2,11 @@
 #include "thread_pool.h"
 
 
+ThreadPool::~ThreadPool()
+{
+    terminate();
+}
+
 void ThreadPool::wait_and_execute()
 {
     std::function<void()> job;
@@ -72,7 +77,19 @@ bool ThreadPool::initialize()
 
 void ThreadPool::terminate()
 {
+    if(workers.empty()) {
+        std::cerr << "Thread pool empty! Can't terminate!" << std::endl;
+        return;
+    }
 
+    stop = true;
+
+    has_jobs.notify_all();
+
+    for(std::thread &worker : workers) {
+        std::cout << "Joining worker " << worker.get_id() << std::endl;
+        worker.join();
+    }
 }
 
 void ThreadPool::add_job(std::function<void()> job)

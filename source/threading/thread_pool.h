@@ -22,6 +22,9 @@ private:
     void wait_and_execute();
 
 public:
+
+    ~ThreadPool();
+
     bool initialize();
 
     void terminate();
