@@ -15,9 +15,11 @@ private:
 
     std::mutex job_mutex;
 
-    std::condition_variable pool_has_jobs;
+    std::condition_variable has_jobs;
 
     bool stop = false;
+
+    void wait_and_execute();
 
 public:
     bool initialize();

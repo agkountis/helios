@@ -2,6 +2,40 @@
 #include "thread_pool.h"
 
 
+void ThreadPool::wait_and_execute()
+{
+    std::function<void()> job;
+
+    while (!stop) {
+
+        {
+            /**
+             * Acquire the mutex.
+             */
+            std::unique_lock<std::mutex> lock(job_mutex);
+
+            /**
+             * The thread waits until jobs exists in the queue.
+             */
+            has_jobs.wait(lock, [this] {
+                return !jobs.empty();
+            });
+
+            /**
+             * Get the job in the front of the queue.
+             */
+            job = jobs.front();
+
+            jobs.pop();
+        }
+
+        /**
+         * Execute the job.
+         */
+        job();
+    }
+}
+
 bool ThreadPool::initialize()
 {
     std::cout << "Initializing thread pool..." << std::endl;
@@ -30,47 +64,7 @@ bool ThreadPool::initialize()
          * and will wait for a job to enter the job queue. Once a job is in the the queue
          * the threads will wake up to acquire and execute it.
          */
-        workers.emplace_back([this] {
-
-            std::function<void()> job;
-
-            while (true) {
-
-                /**
-                 * Conditions for the thread to exit.
-                 */
-                if (stop)
-                    return;
-
-                {
-                    /**
-                     * Acquire the mutex.
-                     */
-                    std::unique_lock<std::mutex> lock(job_mutex);
-
-                    /**
-                     * The thread waits until jobs exists in the queue.
-                     */
-                    pool_has_jobs.wait(lock, [this] {
-                        return !jobs.empty();
-                    });
-
-                    /**
-                     * Get the job in the front of the queue.
-                     */
-                    job = jobs.front();
-
-                    jobs.pop();
-                }
-
-                /**
-                 * Execute the job.
-                 */
-                job();
-            }
-
-        });
-
+        workers.push_back(std::thread(wait_and_execute));
     }
 
     return true;
@@ -83,9 +77,7 @@ void ThreadPool::terminate()
 
 void ThreadPool::add_job(std::function<void()> job)
 {
-    {
-        std::unique_lock<std::mutex> lock(job_mutex);
+    std::unique_lock<std::mutex> lock(job_mutex);
 
-        jobs.push(job);
-    }
+    jobs.push(job);
 }
