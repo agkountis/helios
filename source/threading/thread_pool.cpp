@@ -22,6 +22,7 @@ void ThreadPool::wait_and_execute()
             /**
              * The thread waits until jobs exists in the queue.
              */
+            std::cout << "Waiting for jobs!" << std::endl;
             has_jobs.wait(lock, [this] {
                 return !jobs.empty();
             });
@@ -32,6 +33,11 @@ void ThreadPool::wait_and_execute()
             job = jobs.front();
 
             jobs.pop();
+
+            if(jobs.empty())
+                jobs_done.notify_one();
+
+            std::cout<<"Jobs: "<< jobs.size() << std::endl;
         }
 
         /**
@@ -39,6 +45,7 @@ void ThreadPool::wait_and_execute()
          */
         job();
     }
+
 }
 
 bool ThreadPool::initialize()
@@ -75,19 +82,36 @@ bool ThreadPool::initialize()
     return true;
 }
 
+
+void ThreadPool::wait()
+{
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    jobs_done.wait(lock, [this] {
+       return jobs.empty();
+    });
+
+    std::cout << "Jobs done! Waiting is over!" << std::endl;
+}
+
 void ThreadPool::terminate()
 {
-    if(workers.empty()) {
-        std::cerr << "Thread pool empty! Can't terminate!" << std::endl;
+    if(workers.empty())
         return;
+
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    if(!jobs.empty()) {
+       for(size_t i = 0; i < jobs.size(); i++) {
+           jobs.pop();
+       }
     }
 
     stop = true;
 
     has_jobs.notify_all();
 
-    for(std::thread &worker : workers) {
-        std::cout << "Joining worker " << worker.get_id() << std::endl;
+    for(auto &worker : workers) {
         worker.join();
     }
 }
@@ -97,4 +121,6 @@ void ThreadPool::add_job(std::function<void()> job)
     std::unique_lock<std::mutex> lock(job_mutex);
 
     jobs.push(job);
+
+    has_jobs.notify_all();
 }

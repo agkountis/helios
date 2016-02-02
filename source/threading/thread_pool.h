@@ -17,6 +17,8 @@ private:
 
     std::condition_variable has_jobs;
 
+    std::condition_variable jobs_done;
+
     bool stop = false;
 
     void wait_and_execute();
@@ -26,6 +28,8 @@ public:
     ~ThreadPool();
 
     bool initialize();
+
+    void wait();
 
     void terminate();
 

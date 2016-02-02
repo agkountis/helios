@@ -6,6 +6,7 @@
 #include <ray_tracer.h>
 #include <plane.h>
 #include <thread_pool.h>
+#include <iostream>
 
 int main(int argc, char **argv)
 {
@@ -90,11 +91,20 @@ int main(int argc, char **argv)
 
     threadPool.initialize();
 
-    Renderer *renderer = new RayTracer(scene, image);
 
-    renderer->render();
+    for(int i = 0 ; i < 10 ; i++) {
+        threadPool.add_job([&](){
+            std::cout << "Hello@!!!" << std::endl;
+        });
+    }
 
-    image.save("test.ppm", Image::IMG_FMT_PPM);
+    threadPool.wait();
+
+//    Renderer *renderer = new RayTracer(scene, image);
+//
+//    renderer->render();
+//
+//    image.save("test.ppm", Image::IMG_FMT_PPM);
 
     return 0;
 }
