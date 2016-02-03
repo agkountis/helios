@@ -25,6 +25,12 @@ void Scene::destroy_lights()
 
 /* -------------------------------------------------------------------------- */
 
+Scene::~Scene()
+{
+    destroy_lights();
+    destroy_drawables();
+}
+
 void Scene::set_camera(const Camera &camera)
 {
     this->camera = camera;

@@ -22,6 +22,9 @@ private:
     void destroy_lights();
 
 public:
+
+    ~Scene();
+
     void set_camera(const Camera &camera);
 
     const Camera &get_camera() const;
