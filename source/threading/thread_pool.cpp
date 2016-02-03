@@ -11,7 +11,7 @@ void ThreadPool::wait_and_execute()
 {
     std::function<void()> job;
 
-    while (!stop) {
+    while (true) {
 
         {
             /**
@@ -22,10 +22,14 @@ void ThreadPool::wait_and_execute()
             /**
              * The thread waits until jobs exists in the queue.
              */
-            std::cout << "Waiting for jobs!" << std::endl;
             has_jobs.wait(lock, [this] {
-                return !jobs.empty();
+                return !jobs.empty() || stop;
             });
+
+            if(stop) {
+                std::cout << "Stopping" << std::endl;
+                return;
+            }
 
             /**
              * Get the job in the front of the queue.
@@ -34,16 +38,22 @@ void ThreadPool::wait_and_execute()
 
             jobs.pop();
 
-            if(jobs.empty())
-                jobs_done.notify_one();
-
-            std::cout<<"Jobs: "<< jobs.size() << std::endl;
+            ++active_jobs;
         }
 
         /**
          * Execute the job.
          */
         job();
+
+        {
+            std::unique_lock<std::mutex> lock(job_mutex);
+
+            --active_jobs;
+
+            if(jobs.empty())
+                jobs_done.notify_all();
+        }
     }
 
 }
@@ -88,10 +98,8 @@ void ThreadPool::wait()
     std::unique_lock<std::mutex> lock(job_mutex);
 
     jobs_done.wait(lock, [this] {
-       return jobs.empty();
+       return jobs.empty() && active_jobs == 0;
     });
-
-    std::cout << "Jobs done! Waiting is over!" << std::endl;
 }
 
 void ThreadPool::terminate()
@@ -99,17 +107,19 @@ void ThreadPool::terminate()
     if(workers.empty())
         return;
 
-    std::unique_lock<std::mutex> lock(job_mutex);
+    {
+        std::unique_lock<std::mutex> lock(job_mutex);
 
-    if(!jobs.empty()) {
-       for(size_t i = 0; i < jobs.size(); i++) {
-           jobs.pop();
-       }
+        if(!jobs.empty()) {
+            for(size_t i = 0; i < jobs.size(); i++) {
+                jobs.pop();
+            }
+        }
+
+        stop = true;
+
+        has_jobs.notify_all();
     }
-
-    stop = true;
-
-    has_jobs.notify_all();
 
     for(auto &worker : workers) {
         worker.join();
@@ -122,5 +132,28 @@ void ThreadPool::add_job(std::function<void()> job)
 
     jobs.push(job);
 
-    has_jobs.notify_all();
+    has_jobs.notify_one();
+}
+
+
+size_t ThreadPool::queued_job_count() const
+{
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    return jobs.size();
+}
+
+size_t ThreadPool::active_job_count() const
+{
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    return active_jobs;
+}
+
+
+size_t ThreadPool::pending_job_count() const
+{
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    return active_jobs + jobs.size();
 }
