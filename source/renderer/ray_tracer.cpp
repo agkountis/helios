@@ -10,6 +10,16 @@ RayTracer::~RayTracer()
     delete scene;
 }
 
+
+bool RayTracer::initialize()
+{
+    for(unsigned int x = 0; x < image.get_height(); x++) {
+        this->render_jobs.push_back(std::bind(&RayTracer::render_scanline));
+    }
+
+    return false;
+}
+
 void RayTracer::set_image(const Image &image)
 {
     this->image = image;

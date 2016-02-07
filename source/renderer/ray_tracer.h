@@ -42,6 +42,8 @@ public:
 
     ~RayTracer();
 
+    bool initialize();
+
     void set_scene(const Scene *scene);
 
     void set_image(const Image &image);
