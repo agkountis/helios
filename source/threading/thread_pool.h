@@ -37,6 +37,8 @@ public:
 
     void add_job(std::function<void()> job);
 
+    void add_jobs(const std::vector< std::function<void()> > &jobs);
+
     size_t queued_job_count() const;
 
     size_t active_job_count() const;

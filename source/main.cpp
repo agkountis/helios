@@ -8,6 +8,14 @@
 #include <thread_pool.h>
 #include <iostream>
 
+int add(int i)
+{
+    i++;
+    std::cout << i << std::endl;
+
+    return i;
+}
+
 int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 4.0f), 1);
@@ -92,11 +100,13 @@ int main(int argc, char **argv)
     threadPool.initialize();
 
 
-    for(int i = 0 ; i < 10000 ; i++) {
-        threadPool.add_job([&](){
-            std::cout << "Hello@!!!" << std::endl;
-        });
+    std::vector< std::function<void()> > foo;
+
+    for(int i = 0 ; i < 100000 ; i++) {
+        foo.push_back(std::bind(add, 5));
     }
+
+    threadPool.add_jobs(foo);
 
     threadPool.wait();
 

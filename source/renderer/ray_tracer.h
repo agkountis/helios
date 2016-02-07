@@ -3,13 +3,24 @@
 
 #include <scene.h>
 #include <image.h>
+#include <functional>
 #include "renderer.h"
+
+struct ScanLine {
+    unsigned int line = 0;
+
+    unsigned int size = 0;
+
+    float *pixels;
+};
 
 class RayTracer : public Renderer {
 protected:
     const Scene *scene = nullptr;
 
     Image image;
+
+    std::vector< std::function<void()> > render_jobs;
 
     static const int max_iterations = 10;
 
@@ -20,6 +31,8 @@ protected:
     void find_intersection(const Ray &ray, HitPoint &hit_point);
 
     Ray create_primary_ray(int pixel_x, int pixel_y) const;
+
+    void render_scanline(unsigned int line_number, unsigned int line_size, float *pixels);
 
 public:
     RayTracer() = default;

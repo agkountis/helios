@@ -26,10 +26,8 @@ void ThreadPool::wait_and_execute()
                 return !jobs.empty() || stop;
             });
 
-            if(stop) {
-                std::cout << "Stopping" << std::endl;
+            if(stop)
                 return;
-            }
 
             /**
              * Get the job in the front of the queue.
@@ -135,6 +133,17 @@ void ThreadPool::add_job(std::function<void()> job)
     has_jobs.notify_one();
 }
 
+
+void ThreadPool::add_jobs(const std::vector<std::function<void()> > &jobs)
+{
+    std::unique_lock<std::mutex> lock(job_mutex);
+
+    for(auto &job : jobs) {
+        this->jobs.push(std::move(job));
+    }
+
+    has_jobs.notify_all();
+}
 
 size_t ThreadPool::queued_job_count() const
 {

@@ -161,3 +161,23 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
 
     return ray;
 }
+
+
+void RayTracer::render_scanline(unsigned int line_number, unsigned int line_size, float *pixels)
+{
+    /**
+     * Advance the pointer to the correct line starting point.
+     */
+    pixels += (line_size * line_number);
+
+    for(int y = 0; y < line_size; y++) {
+
+        Ray primary_ray = create_primary_ray(y, line_number);
+
+        Vec3 color = trace_ray(primary_ray);
+
+        *pixels++ = color.x;
+        *pixels++ = color.y;
+        *pixels++ = color.z;
+    }
+}
