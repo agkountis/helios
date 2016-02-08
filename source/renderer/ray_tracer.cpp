@@ -16,13 +16,17 @@ bool RayTracer::initialize()
 
     unsigned int image_width = image.get_width();
 
+    std::cout << "Creating render jobs..." << std::endl;
+
     for(unsigned int x = 0; x < image.get_height(); x++) {
         this->render_jobs.push_back([this, x, image_width, pixels] {
             render_scan_line(x, image_width, pixels);
         });
     }
 
-    return false;
+    std::cout << "Done creating jobs!" << std::endl;
+
+    return true;
 }
 
 void RayTracer::set_image(const Image &image)

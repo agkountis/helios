@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     scene->add_light(lt2);
 
     Image image;
-    image.create(4096, 4096);
+    image.create(8130, 8130);
 
     Renderer *renderer = new RayTracer(scene, image);
 
