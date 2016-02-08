@@ -10,11 +10,16 @@ RayTracer::~RayTracer()
     delete scene;
 }
 
-
 bool RayTracer::initialize()
 {
+    float *pixels = image.get_pixels();
+
+    unsigned int image_width = image.get_width();
+
     for(unsigned int x = 0; x < image.get_height(); x++) {
-        this->render_jobs.push_back(std::bind(&RayTracer::render_scanline));
+        this->render_jobs.push_back([this, x, image_width, pixels] {
+            render_scan_line(x, image_width, pixels);
+        });
     }
 
     return false;
@@ -37,27 +42,12 @@ void RayTracer::render()
         exit(1);
     }
 
-    float *pixels = image.get_pixels();
+    thread_pool.initialize();
 
-    /**
-     * Work with scan-lines for now.
-     */
-    for (int x = 0; x < (int) image.get_height(); x++) {
-        for (int y = 0; y < (int) image.get_width(); y++) {
+    thread_pool.add_jobs(render_jobs);
 
-//            if(x == (image.get_height() / 2) && y == (image.get_width() / 2)) {
-//                asm volatile("int $3\n");
-//            }
+    thread_pool.wait();
 
-            Ray primary_ray = create_primary_ray(y, x);
-
-            Vec3 color = trace_ray(primary_ray);
-
-            *pixels++ = color.x;
-            *pixels++ = color.y;
-            *pixels++ = color.z;
-        }
-    }
 }
 
 Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
@@ -173,14 +163,14 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
 }
 
 
-void RayTracer::render_scanline(unsigned int line_number, unsigned int line_size, float *pixels)
+void RayTracer::render_scan_line(unsigned int line_number, unsigned int line_size, float *pixels)
 {
     /**
      * Advance the pointer to the correct line starting point.
      */
-    pixels += (line_size * line_number);
+    pixels += (line_number * line_size * 3);
 
-    for(int y = 0; y < line_size; y++) {
+    for(unsigned int y = 0; y < line_size; y++) {
 
         Ray primary_ray = create_primary_ray(y, line_number);
 

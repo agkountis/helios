@@ -13,6 +13,8 @@ protected:
 public:
     virtual ~Renderer() = default;
 
+    virtual bool initialize() = 0;
+
     virtual void render() = 0;
 };
 

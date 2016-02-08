@@ -4,15 +4,8 @@
 #include <scene.h>
 #include <image.h>
 #include <functional>
+#include <thread_pool.h>
 #include "renderer.h"
-
-struct ScanLine {
-    unsigned int line = 0;
-
-    unsigned int size = 0;
-
-    float *pixels;
-};
 
 class RayTracer : public Renderer {
 protected:
@@ -22,7 +15,9 @@ protected:
 
     std::vector< std::function<void()> > render_jobs;
 
-    static const int max_iterations = 10;
+    ThreadPool thread_pool;
+
+    static const int max_iterations = 4;
 
     Vec3 shade(const Ray &ray, HitPoint &hit_point, int iterations);
 
@@ -32,7 +27,7 @@ protected:
 
     Ray create_primary_ray(int pixel_x, int pixel_y) const;
 
-    void render_scanline(unsigned int line_number, unsigned int line_size, float *pixels);
+    void render_scan_line(unsigned int line_number, unsigned int line_size, float *pixels);
 
 public:
     RayTracer() = default;

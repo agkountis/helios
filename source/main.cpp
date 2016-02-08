@@ -93,28 +93,14 @@ int main(int argc, char **argv)
     scene->add_light(lt2);
 
     Image image;
-    image.create(1024, 768);
+    image.create(4096, 4096);
 
-    ThreadPool threadPool;
+    Renderer *renderer = new RayTracer(scene, image);
 
-    threadPool.initialize();
+    renderer->initialize();
+    renderer->render();
 
-
-    std::vector< std::function<void()> > foo;
-
-    for(int i = 0 ; i < 100000 ; i++) {
-        foo.push_back(std::bind(add, 5));
-    }
-
-    threadPool.add_jobs(foo);
-
-    threadPool.wait();
-
-//    Renderer *renderer = new RayTracer(scene, image);
-//
-//    renderer->render();
-//
-//    image.save("test.ppm", Image::IMG_FMT_PPM);
+    image.save("test.ppm", Image::IMG_FMT_PPM);
 
     return 0;
 }
