@@ -136,14 +136,14 @@ Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 
     Vec3 color = shade(ray, nearest, iterations);
 
+    image.tone_map_pixel(&color.x, &color.y, &color.z);
+
     /**
     * Gamma correction
     */
-    color.x = (float) pow(color.x, 2.2);
-    color.y = (float) pow(color.y, 2.2);
-    color.z = (float) pow(color.z, 2.2);
-
-    image.tone_map_pixel(&color.x, &color.y, &color.z);
+    color.x = (float) pow(color.x, 0.45454545f);
+    color.y = (float) pow(color.y, 0.45454545f);
+    color.z = (float) pow(color.z, 0.45454545f);
 
     return color;
 }
