@@ -3,7 +3,10 @@
 #include <material.h>
 #include <drawable.h>
 #include <limits>
+#include <chrono>
 #include "ray_tracer.h"
+
+using namespace std::chrono;
 
 RayTracer::~RayTracer()
 {
@@ -48,9 +51,21 @@ void RayTracer::render()
 
     thread_pool.initialize();
 
+    high_resolution_clock::time_point start = high_resolution_clock::now();
+
+    std::cout << "Adding render jobs..." << std::endl;
+
     thread_pool.add_jobs(render_jobs);
 
+    std::cout << "Jobs added, rendering starts..." << std::endl;
+
     thread_pool.wait();
+
+    high_resolution_clock::time_point end = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>(end - start).count() / 1000.0;
+
+    std::cout << "Rendering completed in " << duration << "ms" << std::endl;
 
 }
 
@@ -62,9 +77,9 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 
     Vec3 view_direction = -ray.direction;
 
-    std::vector<Light *> lights = scene->get_lights();
+    const std::vector<Light *> &lights = scene->get_lights();
 
-    for (Light *light : lights) {
+    for (auto light : lights) {
 
         /**
          * Create a shadow ray from the object hit point towards the current light in the loop.
