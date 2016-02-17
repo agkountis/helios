@@ -10,17 +10,14 @@
 int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.3f, 4.0f), 1);
-    sphere->material.diffuse_color = Vec3(0.99f, 0.0f, 0.0f);
-    sphere->material.specular_color = Vec3(0.02f, 0.02f, 0.02f);
-    sphere->material.shininess = 60.0f;
-    sphere->material.reflectivity = 0.06f / 3.0f;
+    sphere->material.albedo = Vec3(1.0f, 1.0f, 1.0f);
+    sphere->material.roughness = 0.6;
+    sphere->material.reflectance = 1.0f - sphere->material.roughness;
 
     Drawable *plane = new Plane(Vec3(0, -1, 0), Vec3(0, 1, 0));
-    plane->material.diffuse_color = Vec3(0.3, 0.6, 0.2);
-    plane->material.specular_color = Vec3(1, 0.4, 1);
-    plane->material.shininess = 60.0;
-    plane->material.reflectivity = 2.4f / 3.0f;
-
+    plane->material.albedo = Vec3(0.3, 0.6, 0.2);
+    plane->material.reflectance = 0.0f;
+    plane->material.roughness = 0.7f;
 
     Camera camera;
     camera.set_position(Vec3(0.0, 0.0, 0.0f));
@@ -29,7 +26,7 @@ int main(int argc, char **argv)
 
     Scene *scene = new Scene;
     scene->add_drawable(sphere);
-    scene->add_drawable(plane);
+    //scene->add_drawable(plane);
 
     scene->set_camera(camera);
 
@@ -44,7 +41,7 @@ int main(int argc, char **argv)
     Light *lt2 = new Light;
     lt2->set_color(Vec3(1, 1, 1));
     lt2->set_position(Vec3(-3.f, 1, 3));
-    scene->add_light(lt2);
+    //scene->add_light(lt2);
 
     Image image;
     image.create(4096, 2048);
