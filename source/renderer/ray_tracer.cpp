@@ -18,6 +18,7 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
      * Cook-Torrance Bi-directional Reflection Distribution Function (BRDF)
      */
 
+    //Clamp roughness to the minimum supported value. (Discovered experimentally)
     float roughness = material.roughness < MIN_ROUGHNESS ? MIN_ROUGHNESS : material.roughness;
 
     //GGX (Trowbridge-Reitz) Normal Distribution Function (NDF)
@@ -46,6 +47,9 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
     float n_dot_v = dot(normal, out_dir);
     float n_dot_l = dot(normal, in_dir);
 
+    /**
+     * if the incoming and outgoing direction are beneath the surface we can't have light transport.
+     */
     if(n_dot_v <= 0.0f || n_dot_l <= 0.0f)
         return 0.0f;
 
@@ -70,7 +74,7 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
 
     float res = (normal_distribution * fresnel * geometric_shadowing) / (4.0f * n_dot_l * n_dot_v);
 
-    return res < 0 ? 0 : res;
+    return res;
 }
 
 RayTracer::~RayTracer()
@@ -149,7 +153,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         /**
          * Create a shadow ray from the object hit point towards the current light in the loop.
          */
-        Ray shadow_ray(hit_point.position, (light->get_position() - hit_point.position).normalized());
+        Ray shadow_ray(hit_point.position, light->get_position() - hit_point.position);
 
         HitPoint shadow_hit_point;
         shadow_hit_point.distance = std::numeric_limits<float>::max();
