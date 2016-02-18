@@ -9,6 +9,8 @@
 
 using namespace std::chrono;
 
+#define MIN_ROUGHNESS 0.027f
+
 static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_dir, const Material &material)
 {
     //--------------------------------------------------------------------------------------------------------------
@@ -16,8 +18,10 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
      * Cook-Torrance Bi-directional Reflection Distribution Function (BRDF)
      */
 
+    float roughness = material.roughness < MIN_ROUGHNESS ? MIN_ROUGHNESS : material.roughness;
+
     //GGX (Trowbridge-Reitz) Normal Distribution Function (NDF)
-    float a = material.roughness * material.roughness;
+    float a = roughness * roughness;
 
     /**
      * half vector
@@ -30,7 +34,7 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
     float denominator = (float)M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
                                        (n_dot_h_squared * (a * a - 1.0f) + 1));
 
-    if(denominator == 0) denominator = 1;
+    if(denominator == 0) denominator = 1e-6f;
 
     float normal_distribution = (a * a) / denominator;
     //--------------------------------------------------------------------------------------------------------------
@@ -39,9 +43,13 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
     /**
      * Geometric Shadowing function Cook-Torrance version.
      */
-    float n_dot_v = std::max(dot(normal, out_dir), 1e-4f);
-    float n_dot_l = std::max(dot(normal, in_dir), 1e-4f);
-    float v_dot_h = std::max(dot(out_dir, h), 1e-4f);
+    float n_dot_v = dot(normal, out_dir);
+    float n_dot_l = dot(normal, in_dir);
+
+    if(n_dot_v <= 0.0f || n_dot_l <= 0.0f)
+        return 0.0f;
+
+    float v_dot_h = std::max(dot(out_dir, h), 1e-6f);
 
     float term_a = (2.0f * n_dot_h * n_dot_v) / v_dot_h;
     float term_b = (2.0f * n_dot_h * n_dot_l) / v_dot_h;
@@ -168,7 +176,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 
         float f_reflective = eval_brdf(hit_point.normal, light_direction, view_direction, material);
 
-        Vec3 col = (material.albedo * diff_light) / M_PI;
+        Vec3 col = ((material.albedo * diff_light) / M_PI) * material.roughness;
         col = col + material.albedo * f_reflective;
 
         color = color + col * light->get_color();
@@ -181,6 +189,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         Vec3 refl_dir = reflect(ray.direction, hit_point.normal);
         float brdf = eval_brdf(hit_point.normal, refl_dir, view_direction, material);
 
+        //TODO: Move this in the brdf eval and use radiometric or photometric lights.
         reflectivity *= brdf > 1.0f ? 1.0f : brdf;
 
         if(reflectivity > 0.0001) {
