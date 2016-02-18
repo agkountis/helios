@@ -4,9 +4,66 @@
 #include <drawable.h>
 #include <limits>
 #include <chrono>
+#include <assert.h>
 #include "ray_tracer.h"
 
 using namespace std::chrono;
+
+static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_dir, const Material &material)
+{
+    //--------------------------------------------------------------------------------------------------------------
+    /**
+     * Cook-Torrance Bi-directional Reflection Distribution Function (BRDF)
+     */
+
+    //GGX (Trowbridge-Reitz) Normal Distribution Function (NDF)
+    float a = material.roughness * material.roughness;
+
+    /**
+     * half vector
+     */
+    Vec3 h = (out_dir + in_dir).normalized();
+
+    float n_dot_h = std::max(dot(normal, h), 0.0f);
+    float n_dot_h_squared = n_dot_h * n_dot_h;
+
+    float denominator = (float)M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
+                                       (n_dot_h_squared * (a * a - 1.0f) + 1));
+
+    if(denominator == 0) denominator = 1;
+
+    float normal_distribution = (a * a) / denominator;
+    //--------------------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------------------------
+    /**
+     * Geometric Shadowing function Cook-Torrance version.
+     */
+    float n_dot_v = std::max(dot(normal, out_dir), 1e-4f);
+    float n_dot_l = std::max(dot(normal, in_dir), 1e-4f);
+    float v_dot_h = std::max(dot(out_dir, h), 1e-4f);
+
+    float term_a = (2.0f * n_dot_h * n_dot_v) / v_dot_h;
+    float term_b = (2.0f * n_dot_h * n_dot_l) / v_dot_h;
+
+    float geometric_shadowing = std::min(std::min(1.0f, term_a), term_b);
+
+    //--------------------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------------------------
+    /**
+     * Fresnel term Schlick approximation
+     */
+
+    float reflectivity = 1.0f - material.roughness;
+    float fresnel = reflectivity + (1.0f - reflectivity) * (float)pow(1.0f - (v_dot_h), 5.0f);
+
+    //--------------------------------------------------------------------------------------------------------------
+
+    float res = (normal_distribution * fresnel * geometric_shadowing) / (4.0f * n_dot_l * n_dot_v);
+
+    return res < 0 ? 0 : res;
+}
 
 RayTracer::~RayTracer()
 {
@@ -93,7 +150,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
          * Check for intersections with other objects.
          * If an intersection is found then the being shaded is obscured by another object thus it is in shadow.
          */
-        //find_intersection(shadow_ray, shadow_hit_point);
+        find_intersection(shadow_ray, shadow_hit_point);
 
         /**
          * If an object is hit skip lighting calculations.
@@ -104,95 +161,52 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         Vec3 light_direction = light->get_position() - hit_point.position;
         light_direction.normalize();
 
-        Vec3 reflection_vector = -reflect(view_direction, hit_point.normal);
-
         /**
          * Lambertian diffuse.
          */
         float diff_light = std::max(dot(light_direction, hit_point.normal), 0.0f);
 
-        //--------------------------------------------------------------------------------------------------------------
-        /**
-         * Cook-Torrance Bi-directional Reflection Distribution Function (BRDF)
-         */
+        float f_reflective = eval_brdf(hit_point.normal, light_direction, view_direction, material);
 
-        //GGX (Trowbridge-Reitz) Normal Distribution Function (NDF)
-        float a = material.roughness * material.roughness;
+        Vec3 col = (material.albedo * diff_light) / M_PI;
+        col = col + material.albedo * f_reflective;
 
-        /**
-         * half vector
-         */
-        Vec3 h = (view_direction + light_direction).normalized();
-
-        float n_dot_h = dot(hit_point.normal, h);
-        float n_dot_h_squared = n_dot_h * n_dot_h;
-
-        float denominator = (float)M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
-                (n_dot_h_squared * (a * a - 1.0f) + 1));
-
-        float normal_distribution = (a * a) / denominator;
-        //--------------------------------------------------------------------------------------------------------------
-
-        //--------------------------------------------------------------------------------------------------------------
-        /**
-         * Geometric Shadowing function Cook-Torrance version.
-         */
-        float n_dot_v = dot(hit_point.normal, view_direction);
-        float n_dot_l = dot(hit_point.normal, light_direction);
-        float v_dot_h = dot(view_direction, h);
-
-        float term_a = (2.0f * n_dot_h * n_dot_v) / v_dot_h;
-        float term_b = (2.0f * n_dot_h * n_dot_l) / v_dot_h;
-
-        float geometric_shadowing = std::min(std::min(1.0f, term_a), term_b);
-
-        //--------------------------------------------------------------------------------------------------------------
-
-        //--------------------------------------------------------------------------------------------------------------
-        /**
-         * Fresnel term Schlick approximation
-         */
-        float fresnel = material.reflectance + (1.0f - material.reflectance) * (float)pow(1.0f - (v_dot_h), 5.0f);
-
-        //--------------------------------------------------------------------------------------------------------------
-
-        float f_reflective = (normal_distribution * fresnel * geometric_shadowing) / (4.0f * n_dot_l * n_dot_v);
-
-        color = color + (material.albedo  * diff_light) / M_PI;
-        color = color + material.albedo * f_reflective;
-
-        color = color * light->get_color();
+        color = color + col * light->get_color();
     }
 
-//    if (material.reflectance > 0.0001) {
-//        Ray reflection_ray = Ray(hit_point.position, reflect(ray.direction, hit_point.normal));
-//        color = color + trace_ray(reflection_ray, iterations + 1) * material.reflectance;
-//    }
+    float reflectivity = (1.0f - material.roughness);
+
+    if (reflectivity > 0.0001) {
+
+        Vec3 refl_dir = reflect(ray.direction, hit_point.normal);
+        float brdf = eval_brdf(hit_point.normal, refl_dir, view_direction, material);
+
+        reflectivity *= brdf > 1.0f ? 1.0f : brdf;
+
+        if(reflectivity > 0.0001) {
+            Ray reflection_ray = Ray(hit_point.position, refl_dir);
+            color = color + trace_ray(reflection_ray, iterations + 1) * reflectivity;
+        }
+    }
 
     return color;
 }
 
 Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 {
+    if(iterations > max_iterations) {
+        return Vec3(0.0, 0.0, 0.0);
+    }
     HitPoint nearest;
     nearest.distance = std::numeric_limits<float>::max();
 
     find_intersection(ray, nearest);
 
-    if (!nearest.object || iterations > max_iterations) {
+    if (!nearest.object) {
         return Vec3(0.0, 0.0, 0.0);
     }
 
     Vec3 color = shade(ray, nearest, iterations);
-
-    image.tone_map_pixel(&color.x, &color.y, &color.z);
-
-    /**
-    * Gamma correction
-    */
-    color.x = (float) pow(color.x, 0.45454545f);
-    color.y = (float) pow(color.y, 0.45454545f);
-    color.z = (float) pow(color.z, 0.45454545f);
 
     return color;
 }
@@ -251,6 +265,15 @@ void RayTracer::render_scan_line(unsigned int line_number, unsigned int line_siz
         Ray primary_ray = create_primary_ray(y, line_number);
 
         Vec3 color = trace_ray(primary_ray);
+
+        image.tone_map_pixel(&color.x, &color.y, &color.z);
+
+        /**
+        * Gamma correction
+        */
+        color.x = (float) pow(color.x, 0.45454545f);
+        color.y = (float) pow(color.y, 0.45454545f);
+        color.z = (float) pow(color.z, 0.45454545f);
 
         *pixels++ = color.x;
         *pixels++ = color.y;

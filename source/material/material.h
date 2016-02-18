@@ -12,12 +12,11 @@ public:
 
     float roughness = 0.0f;
 
-    float reflectance = 0.0f;
+    float ior = 0.0f;
 
     Material() = default;
 
-    Material(const Vec3 &albedo, float roughness, float reflectance) : albedo(albedo), roughness(roughness),
-                                                                       reflectance(reflectance)
+    Material(const Vec3 &albedo, float roughness, float reflectance) : albedo(albedo), roughness(roughness)
     { }
 };
 
