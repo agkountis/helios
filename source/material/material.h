@@ -16,7 +16,6 @@ public:
 
     Material() = default;
 
-
     Material(const Vec3 &albedo, float roughness, float reflectance) : albedo(albedo), roughness(roughness),
                                                                        reflectance(reflectance)
     { }

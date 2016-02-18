@@ -158,7 +158,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 
         float f_reflective = (normal_distribution * fresnel * geometric_shadowing) / (4.0f * n_dot_l * n_dot_v);
 
-        color = color + material.albedo * diff_light *  (1.0f - f_reflective);
+        color = color + (material.albedo  * diff_light) / M_PI;
         color = color + material.albedo * f_reflective;
 
         color = color * light->get_color();

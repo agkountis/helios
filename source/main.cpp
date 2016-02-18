@@ -10,14 +10,14 @@
 int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.3f, 4.0f), 1);
-    sphere->material.albedo = Vec3(1.0f, 1.0f, 1.0f);
-    sphere->material.roughness = 0.6;
+    sphere->material.albedo = Vec3(1.0f, 0.1f, 0.1f);
+    sphere->material.roughness = 0.4f;
     sphere->material.reflectance = 1.0f - sphere->material.roughness;
 
     Drawable *plane = new Plane(Vec3(0, -1, 0), Vec3(0, 1, 0));
     plane->material.albedo = Vec3(0.3, 0.6, 0.2);
-    plane->material.reflectance = 0.0f;
-    plane->material.roughness = 0.7f;
+    plane->material.roughness = 0.1f;
+    plane->material.reflectance = 1.0f - plane->material.roughness;
 
     Camera camera;
     camera.set_position(Vec3(0.0, 0.0, 0.0f));
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
     Scene *scene = new Scene;
     scene->add_drawable(sphere);
-    //scene->add_drawable(plane);
+    scene->add_drawable(plane);
 
     scene->set_camera(camera);
 
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
     Light *lt2 = new Light;
     lt2->set_color(Vec3(1, 1, 1));
-    lt2->set_position(Vec3(-3.f, 1, 3));
-    //scene->add_light(lt2);
+    lt2->set_position(Vec3(-4.f, 1, 0));
+    scene->add_light(lt2);
 
     Image image;
     image.create(4096, 2048);
