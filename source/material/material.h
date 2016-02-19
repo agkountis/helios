@@ -14,9 +14,12 @@ public:
 
     float ior = 0.0f;
 
+    bool metallic = false;
+
     Material() = default;
 
-    Material(const Vec3 &albedo, float roughness, float reflectance) : albedo(albedo), roughness(roughness)
+    Material(const Vec3 &albedo, float roughness, float ior, bool metallic) : albedo(albedo), roughness(roughness),
+                                                                              ior(ior), metallic(metallic)
     { }
 };
 

@@ -37,12 +37,14 @@ static void sphere_flake(Scene * sc, const Material &mat, const Vec3 &pos, float
 int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.3f, 4.0f), 1);
-    sphere->material.albedo = Vec3(0.93f, 0.0f, 0.0f);
-    sphere->material.roughness = 0.3f;
+    sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
+    sphere->material.roughness = 0.05f;
+    sphere->material.metallic = true;
 
     Drawable *plane = new Plane(Vec3(0, -2, 0), Vec3(0, 1, 0));
-    plane->material.albedo = Vec3(0.000, 0.000, 0.5);
+    plane->material.albedo = Vec3(0.1, 0.1f, 0.1);
     plane->material.roughness = 0.1f;
+    plane->material.metallic = true;
 
     Camera camera;
     camera.set_position(Vec3(0.0, 0.0, 0.0f));
@@ -50,7 +52,7 @@ int main(int argc, char **argv)
     camera.set_fov(80.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
-    sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 5);
+    sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 4);
     //scene->add_drawable(sphere);
     scene->add_drawable(plane);
 

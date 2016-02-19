@@ -11,12 +11,14 @@ struct HitPoint {
     Vec3 position;
     Vec3 normal;
     double distance = 0.0;
+
 };
 
 class Ray {
 public:
     Vec3 origin;
     Vec3 direction;
+    double energy = 1.0;
 
     Ray() = default;
 

@@ -17,7 +17,10 @@ protected:
 
     ThreadPool thread_pool;
 
-    static const int max_iterations = 4;
+    static const int max_iterations = 100;
+
+    //Using 1 / 255 as a threshold.
+    static constexpr double energy_threshold = 0.003921569;
 
     Vec3 shade(const Ray &ray, HitPoint &hit_point, int iterations);
 
