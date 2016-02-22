@@ -14,7 +14,7 @@ set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h
         source/math/matrix/mat4.cpp source/scene/scene.h source/scene/scene.cpp source/image/image.h
         source/image/image.cpp source/camera/camera.h source/camera/camera.cpp
         source/geometry/drawable.h source/light/light.h source/geometry/plane.h source/geometry/plane.cpp
-        source/threading/thread_pool.h source/threading/thread_pool.cpp)
+        source/threading/thread_pool.h source/threading/thread_pool.cpp source/renderer/lighting_model.h)
 
 include_directories("source/math/vector")
 include_directories("source/math/ray")
