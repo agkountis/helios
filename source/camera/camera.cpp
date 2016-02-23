@@ -51,12 +51,15 @@ const Mat4 &Camera::get_transformation_matrix()
      * Create the correct camera matrix.
      */
     //TODO: FIX THE LOOK-AT MATRIX.
-    transformation = Mat4(right.x, right.y, right.z, 0,
-                          up.x, up.y, up.z, 0,
-                          camera_dir.x, camera_dir.y, camera_dir.z, 0,
+    transformation = Mat4(right.x, up.x, camera_dir.x, 0,
+                          right.y, up.y, camera_dir.y, 0,
+                          right.z, up.z, camera_dir.z, 0,
                           0, 0, 0, 1);
 
-    transformation.translate(position);
+    Mat4 trans;
+    trans.set_column_vector(position.x, position.y, position.z, 1.0f, 3);
+
+    transformation = trans * transformation;
 
     return transformation;
 }

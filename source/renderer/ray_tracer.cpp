@@ -181,7 +181,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         float f_reflective = eval_brdf(hit_point.normal, light_direction, view_direction, material);
 
         Vec3 col = ((material.albedo * diff_light) / M_PI) * material.roughness;
-        col = material.metallic ? col + material.albedo * f_reflective: col + Vec3(1.0, 1.0, 1.0) * f_reflective;
+        col = material.metallic ? col + material.albedo * f_reflective : col + Vec3(1.0, 1.0, 1.0) * f_reflective;
 
         color = color + col * light->get_color();
     }
@@ -199,7 +199,8 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         if(reflectivity > 0.0001) {
             Ray reflection_ray = Ray(hit_point.position, refl_dir);
             reflection_ray.energy = ray.energy * reflectivity;
-            color = color + trace_ray(reflection_ray, iterations + 1) * reflectivity;
+            Vec3 refl_color = material.metallic ? material.albedo * reflectivity : Vec3(1.0, 1.0, 1.0) * reflectivity;
+            color = color + trace_ray(reflection_ray, iterations + 1) * refl_color;
         }
     }
 

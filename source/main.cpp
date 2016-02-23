@@ -43,17 +43,17 @@ int main(int argc, char **argv)
 
     Drawable *plane = new Plane(Vec3(0, -1, 0), Vec3(0, 1, 0));
     plane->material.albedo = Vec3(0.1, 0.1f, 0.1);
-    plane->material.roughness = 0.1f;
+    plane->material.roughness = 0.2f;
     plane->material.metallic = true;
 
     Camera camera;
-    camera.set_position(Vec3(0.0, 0.0, 0.0f));
+    camera.set_position(Vec3(2.0, 2.0, -2.0f));
     camera.set_target(Vec3(0.0, 0.0f, 4));
-    camera.set_fov(80.0f, Camera::CAM_FOV_DEGREES);
+    camera.set_fov(50.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
-    //sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 4);
-    scene->add_drawable(sphere);
+    sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 6);
+    //scene->add_drawable(sphere);
     scene->add_drawable(plane);
 
     scene->set_camera(camera);
