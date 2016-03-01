@@ -5,54 +5,29 @@
 #include <renderer.h>
 #include <ray_tracer.h>
 #include <plane.h>
+#include <utils.h>
 
-static void sphere_flake(Scene * sc, const Material &mat, const Vec3 &pos, float radius, float scale, int iter)
-{
-    if(iter <= 0.0f)
-        return;
-
-    static Vec3 offs[] = {
-            Vec3(1, 0, 0),
-            Vec3(-1, 0, 0),
-            Vec3(0, 1, 0),
-            Vec3(0, -1, 0),
-            Vec3(0, 0, 1),
-            Vec3(0, 0, -1)
-    };
-
-    Sphere *sphere = new Sphere(pos, radius);
-    sphere->material = mat;
-
-    sc->add_drawable(sphere);
-
-    for(auto v : offs) {
-
-        float new_rad = radius * scale;
-        Vec3 new_pos = pos + v * (radius + new_rad);
-
-        sphere_flake(sc, mat, new_pos, new_rad, scale, iter - 1);
-    }
-}
 
 int main(int argc, char **argv)
 {
-    Drawable *sphere = new Sphere(Vec3(0.0, 0.3f, 4.0f), 1);
+    Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 4.0f), 1);
     sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
     sphere->material.roughness = 0.3f;
     sphere->material.metallic = true;
 
-    Drawable *plane = new Plane(Vec3(0, -1, 0), Vec3(0, 1, 0));
+    Drawable *plane = new Plane(Vec3(0, -1.5f, 0), Vec3(0, 1, 0));
     plane->material.albedo = Vec3(0.1, 0.1f, 0.1);
     plane->material.roughness = 0.2f;
     plane->material.metallic = true;
 
     Camera camera;
-    camera.set_position(Vec3(2.0, 2.0, -2.0f));
+    camera.set_position(Vec3(0.0f, 0.0f, -2.0f));
     camera.set_target(Vec3(0.0, 0.0f, 4));
-    camera.set_fov(50.0f, Camera::CAM_FOV_DEGREES);
+    camera.set_fov(45.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
-    sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 6);
+
+    Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 4);
     //scene->add_drawable(sphere);
     scene->add_drawable(plane);
 
