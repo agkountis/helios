@@ -35,7 +35,9 @@ public:
 
     float get_fov() const;
 
-    const Mat4 &get_transformation_matrix();
+    void calculate_transformation();
+
+    const Mat4 &get_transformation_matrix() const;
 };
 
 #endif //HELIOS_CAMERA_H
