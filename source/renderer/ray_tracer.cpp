@@ -261,7 +261,7 @@ Ray RayTracer::create_primary_ray(int pixel_x, int pixel_y) const
     ray.direction.y = 1.0f - 2.0f * (float) pixel_y / (float) image_height;
     ray.direction.z = 1.0f / (float) tan(camera_fov / 2.0f);
 
-    ray.direction.normalize();
+    //ray.direction.normalize();
 
     ray.transform(camera.get_transformation_matrix());
 
