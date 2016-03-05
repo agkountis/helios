@@ -12,17 +12,17 @@ int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 0.0f), 0.3);
     sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
-    sphere->material.roughness = 1.0;
-    sphere->material.metallic = false;
+    sphere->material.roughness = 0.2;
+    sphere->material.metallic = true;
 
     Drawable *sphere2 = new Sphere(Vec3(-0.5f, -0.0f, 0.0f), 0.1);
     sphere2->material.albedo = Vec3(1.000, 0.0f, 0.0);
-    sphere2->material.roughness = 1.0f;
+    sphere2->material.roughness = 0.2f;
     sphere2->material.metallic = false;
 
     Drawable *plane_d = new Plane(Vec3(0, -0.3f, 0), Vec3(0, 1, 0));
     plane_d->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_d->material.roughness = 0.3f;
+    plane_d->material.roughness = 1.0f;
     plane_d->material.metallic = false;
 
     Drawable *plane_b = new Plane(Vec3(0, 0, 6), Vec3(0, 0, -1));
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     Drawable *plane_l = new Plane(Vec3(-3.5f, 0, 0), Vec3(1, 0, 0));
     plane_l->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_l->material.roughness = 0.7;
+    plane_l->material.roughness = 1.0;
     plane_l->material.metallic = false;
 
     Drawable *plane_r = new Plane(Vec3(3.5f, 0, 0), Vec3(-1, 0, 0));
@@ -57,9 +57,9 @@ int main(int argc, char **argv)
 
     Scene *scene = new Scene;
 
-    //Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0.6, 4.0f), 1, 0.4, 4);
-    scene->add_drawable(sphere);
-    scene->add_drawable(sphere2);
+    Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0, 0), 0.1, 0.4, 4);
+    //scene->add_drawable(sphere);
+    //scene->add_drawable(sphere2);
     scene->add_drawable(plane_d);
     scene->add_drawable(plane_b);
     scene->add_drawable(plane_u);
