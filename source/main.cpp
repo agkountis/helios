@@ -12,17 +12,17 @@ int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 0.0f), 0.3);
     sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
-    sphere->material.roughness = 0.01;
-    sphere->material.metallic = true;
+    sphere->material.roughness = 1.0;
+    sphere->material.metallic = false;
 
     Drawable *sphere2 = new Sphere(Vec3(-0.5f, -0.0f, 0.0f), 0.1);
     sphere2->material.albedo = Vec3(1.000, 0.0f, 0.0);
-    sphere2->material.roughness = 0.01;
-    sphere2->material.metallic = true;
+    sphere2->material.roughness = 1.0f;
+    sphere2->material.metallic = false;
 
     Drawable *plane_d = new Plane(Vec3(0, -0.3f, 0), Vec3(0, 1, 0));
     plane_d->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_d->material.roughness = 1.0f;
+    plane_d->material.roughness = 0.3f;
     plane_d->material.metallic = false;
 
     Drawable *plane_b = new Plane(Vec3(0, 0, 6), Vec3(0, 0, -1));
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     plane_b->material.roughness = 1.0;
     plane_b->material.metallic = false;
 
-    Drawable *plane_u = new Plane(Vec3(0, 3.0f, 0), Vec3(0, -1, 0));
+    Drawable *plane_u = new Plane(Vec3(0, 7.0f, 0), Vec3(0, -1, 0));
     plane_u->material.albedo = Vec3(1.0, 1.0f, 1.0);
     plane_u->material.roughness = 1.0;
     plane_u->material.metallic = false;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
     Drawable *plane_r = new Plane(Vec3(3.5f, 0, 0), Vec3(-1, 0, 0));
     plane_r->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_r->material.roughness = 0.2;
+    plane_r->material.roughness = 1.0;
     plane_r->material.metallic = false;
 
     Drawable *plane_f = new Plane(Vec3(0, 0.0f, -3), Vec3(0, 0, 1));
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     plane_f->material.metallic = false;
 
     Camera camera;
-    camera.set_position(Vec3(-1.0f, 0.0f, -2.0f));
+    camera.set_position(Vec3(0.0f, 0.0f, -2.0f));
     camera.set_target(Vec3(0.0, 0.0f, 0));
     camera.set_fov(50.0f, Camera::CAM_FOV_DEGREES);
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
     lt = new Light;
     lt->set_color(Vec3(1.0f, 1.0f, 1.0f));
-    lt->set_position(Vec3(0.0f, 1.0, 0.0f));
+    lt->set_position(Vec3(0.0f, 6.0, 0.0f));
 
     scene->add_light(lt);
 
