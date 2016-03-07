@@ -61,6 +61,34 @@ inline Vec3 operator+(const Vec3 &vec, float scalar)
 {
     return Vec3(vec.x + scalar, vec.y + scalar, vec.z + scalar);
 }
+
+inline void operator+=(Vec3 &vec, float scalar)
+{
+    vec.x += scalar;
+    vec.y += scalar;
+    vec.z += scalar;
+}
+
+inline void operator-=(Vec3 &vec, float scalar)
+{
+    vec.x -= scalar;
+    vec.y -= scalar;
+    vec.z -= scalar;
+}
+
+inline void operator*=(Vec3 &vec, float scalar)
+{
+    vec.x *= scalar;
+    vec.y *= scalar;
+    vec.z *= scalar;
+}
+
+inline void operator/=(Vec3 &vec, float scalar)
+{
+    vec.x /= scalar;
+    vec.y /= scalar;
+    vec.z /= scalar;
+}
 /* ----------------------------------------------------------------- */
 
 /**
@@ -79,6 +107,34 @@ inline Vec3 operator-(const Vec3 &vec1, const Vec3 &vec2)
 inline Vec3 operator*(const Vec3 &vec1, const Vec3 &vec2)
 {
     return Vec3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
+}
+
+inline void operator+=(Vec3 &vec1, const Vec3 &vec2)
+{
+    vec1.x += vec2.x;
+    vec1.y += vec2.y;
+    vec1.z += vec2.z;
+}
+
+inline void operator-=(Vec3 &vec1, const Vec3 &vec2)
+{
+    vec1.x -= vec2.x;
+    vec1.y -= vec2.y;
+    vec1.z -= vec2.z;
+}
+
+inline void operator*=(Vec3 &vec1, const Vec3 &vec2)
+{
+    vec1.x *= vec2.x;
+    vec1.y *= vec2.y;
+    vec1.z *= vec2.z;
+}
+
+inline void operator/=(Vec3 &vec1, const Vec3 &vec2)
+{
+    vec1.x /= vec2.x;
+    vec1.y /= vec2.y;
+    vec1.z /= vec2.z;
 }
 /* ----------------------------------------------------------------- */
 
