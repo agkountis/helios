@@ -10,19 +10,19 @@
 
 int main(int argc, char **argv)
 {
-    Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 0.0f), 0.3);
+    Drawable *sphere = new Sphere(Vec3(2.0, 0.0f, 0.0f), 0.3);
     sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
-    sphere->material.roughness = 0.2;
+    sphere->material.roughness = 0.3;
     sphere->material.metallic = true;
 
-    Drawable *sphere2 = new Sphere(Vec3(-0.5f, -0.0f, 0.0f), 0.1);
+    Drawable *sphere2 = new Sphere(Vec3(1.5f, -0.0f, 0.0f), 0.1);
     sphere2->material.albedo = Vec3(1.000, 0.0f, 0.0);
-    sphere2->material.roughness = 0.2f;
+    sphere2->material.roughness = 0.999f;
     sphere2->material.metallic = false;
 
     Drawable *plane_d = new Plane(Vec3(0, -0.3f, 0), Vec3(0, 1, 0));
     plane_d->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_d->material.roughness = 1.0f;
+    plane_d->material.roughness = 0.8f;
     plane_d->material.metallic = false;
 
     Drawable *plane_b = new Plane(Vec3(0, 0, 6), Vec3(0, 0, -1));
@@ -41,8 +41,8 @@ int main(int argc, char **argv)
     plane_l->material.metallic = false;
 
     Drawable *plane_r = new Plane(Vec3(3.5f, 0, 0), Vec3(-1, 0, 0));
-    plane_r->material.albedo = Vec3(1.0, 1.0f, 1.0);
-    plane_r->material.roughness = 1.0;
+    plane_r->material.albedo = Vec3(1.0, 0.1f, 0.1);
+    plane_r->material.roughness = 0.4;
     plane_r->material.metallic = false;
 
     Drawable *plane_f = new Plane(Vec3(0, 0.0f, -3), Vec3(0, 0, 1));
@@ -51,34 +51,40 @@ int main(int argc, char **argv)
     plane_f->material.metallic = false;
 
     Camera camera;
-    camera.set_position(Vec3(0.0f, 0.0f, -2.0f));
-    camera.set_target(Vec3(0.0, 0.0f, 0));
+    camera.set_position(Vec3(-0.1f, 0.0f, -1.0f));
+    camera.set_target(Vec3(2.0, 0.0f, 0));
     camera.set_fov(50.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
 
-    Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0, 0), 0.1, 0.4, 4);
-    //scene->add_drawable(sphere);
-    //scene->add_drawable(sphere2);
+    //Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0.4, 0), 0.3, 0.4, 4);
+    scene->add_drawable(sphere);
+    scene->add_drawable(sphere2);
     scene->add_drawable(plane_d);
     scene->add_drawable(plane_b);
-    scene->add_drawable(plane_u);
+//    //scene->add_drawable(plane_u);
     scene->add_drawable(plane_l);
     scene->add_drawable(plane_r);
-    scene->add_drawable(plane_f);
+//    scene->add_drawable(plane_f);
 
     scene->set_camera(camera);
 
-    Light *lt;
+    Light *lt, *lt2;
 
     lt = new Light;
     lt->set_color(Vec3(1.0f, 1.0f, 1.0f));
-    lt->set_position(Vec3(0.0f, 6.0, 0.0f));
+    lt->set_position(Vec3(3.0f, 2.0, -6.0f));
 
     scene->add_light(lt);
 
+    lt2 = new Light;
+    lt2->set_color(Vec3(1.0, 1.0, 1.0));
+    lt2->set_position(Vec3(-3.0, 6.0, 3.0));
+
+    //scene->add_light(lt2);
+
     Image image;
-    image.create(2048, 2048);
+    image.create(7680, 4320);
 
     Renderer *renderer = new RayTracer(scene, image);
 

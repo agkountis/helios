@@ -37,12 +37,23 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
     float n_dot_h = std::max(dot(normal, h), 0.0f);
     float n_dot_h_squared = n_dot_h * n_dot_h;
 
-    float denominator = (float)M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
-                                       (n_dot_h_squared * (a * a - 1.0f) + 1));
+    float denominator = (float) M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
+                                        (n_dot_h_squared * (a * a - 1.0f) + 1));
 
-    if(denominator == 0) denominator = 1e-6f;
+    if (denominator == 0.0f) denominator = 1e-6f;
 
     float normal_distribution = (a * a) / denominator;
+
+    //Beckmann normal distribution
+//    float angle = acos(n_dot_h);
+//    float nom = exp( -(tan(angle) * tan(angle)) / (roughness * roughness) );
+//    float denom = M_PI * (roughness * roughness) * pow(cos(angle), 4);
+//    if(denom == 0)
+//        denom = 1e-6f;
+//
+//    if(nom == 0)
+//        nom = 1e-6f;
+//    float normal_distribution = nom / denom;
     //--------------------------------------------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------------------------------------------
@@ -55,7 +66,7 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
     /**
      * if the incoming and outgoing direction are beneath the surface we can't have light transport.
      */
-    if(n_dot_v <= 0.0f || n_dot_l <= 0.0f)
+    if (n_dot_v <= 0.0f || n_dot_l <= 0.0f)
         return 0.0f;
 
     float v_dot_h = std::max(dot(out_dir, h), 1e-6f);
@@ -73,7 +84,7 @@ static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_d
      */
 
     float reflectivity = 1.0f - material.roughness;
-    float fresnel = reflectivity + (1.0f - reflectivity) * (float)pow(1.0f - (v_dot_h), 5.0f);
+    float fresnel = reflectivity + (1.0f - reflectivity) * (float) pow(1.0f - (v_dot_h), 5.0f);
 
     //--------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +106,7 @@ bool RayTracer::initialize()
 
     std::cout << "Creating render jobs..." << std::endl;
 
-    for(unsigned int x = 0; x < image.get_height(); x++) {
+    for (unsigned int x = 0; x < image.get_height(); x++) {
         this->render_jobs.push_back([this, x, image_width, pixels] {
             render_scan_line(x, image_width, pixels);
         });
@@ -150,6 +161,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
     Material material = ((Drawable *) hit_point.object)->material;
 
     Vec3 view_direction = -ray.direction;
+    view_direction.normalize();
 
     const std::vector<Light *> &lights = scene->get_lights();
 
@@ -196,12 +208,12 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
     if (reflectivity > 0.0001) {
 
         Vec3 refl_dir = reflect(ray.direction, hit_point.normal);
-        float brdf = eval_brdf(hit_point.normal, refl_dir, view_direction, material);
+        float brdf = eval_brdf(hit_point.normal, refl_dir.normalized(), view_direction, material);
 
         //TODO: Move this in the brdf eval and use radiometric or photometric lights.
         reflectivity *= brdf > 1.0f ? 1.0f : brdf;
 
-        if(reflectivity > 0.0001) {
+        if (reflectivity > 0.0001) {
             Ray reflection_ray = Ray(hit_point.position, refl_dir);
             reflection_ray.energy = ray.energy * reflectivity;
             Vec3 refl_color = material.metallic ? material.albedo * reflectivity : Vec3(1.0, 1.0, 1.0) * reflectivity;
@@ -214,7 +226,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 
 Vec3 RayTracer::trace_ray(const Ray &ray, int iterations)
 {
-    if(iterations > max_iterations || ray.energy < energy_threshold) {
+    if (iterations > max_iterations || ray.energy < energy_threshold) {
         return Vec3(0.0, 0.0, 0.0);
     }
 
@@ -282,7 +294,7 @@ void RayTracer::render_scan_line(unsigned int line_number, unsigned int line_siz
      */
     pixels += (line_number * line_size * 3);
 
-    for(unsigned int y = 0; y < line_size; y++) {
+    for (unsigned int y = 0; y < line_size; y++) {
 
         Ray primary_ray = create_primary_ray(y, line_number);
 
