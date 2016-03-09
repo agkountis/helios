@@ -15,7 +15,7 @@ set(SOURCE_FILES source/main.cpp source/math/vector/vec3.h
         source/image/image.cpp source/camera/camera.h source/camera/camera.cpp
         source/geometry/drawable.h source/light/light.h source/geometry/plane.h source/geometry/plane.cpp
         source/threading/thread_pool.h source/threading/thread_pool.cpp
-        source/utils/utils.h source/utils/utils.cpp)
+        source/utils/utils.h source/utils/utils.cpp source/renderer/shader.h source/renderer/shader.cpp)
 
 include_directories("source/math/vector")
 include_directories("source/math/ray")
