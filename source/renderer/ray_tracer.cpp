@@ -14,85 +14,6 @@
 
 using namespace std::chrono;
 
-#define MIN_ROUGHNESS 0.027f
-
-static float eval_brdf(const Vec3 &normal, const Vec3 &in_dir, const Vec3 &out_dir, const Material &material)
-{
-    //--------------------------------------------------------------------------------------------------------------
-    /**
-     * Cook-Torrance Bi-directional Reflection Distribution Function (BRDF)
-     */
-
-    //Clamp roughness to the minimum supported value. (Discovered experimentally)
-    float roughness = material.roughness < MIN_ROUGHNESS ? MIN_ROUGHNESS : material.roughness;
-
-    //GGX (Trowbridge-Reitz) Normal Distribution Function (NDF)
-    float a = roughness * roughness;
-
-    /**
-     * half vector
-     */
-    Vec3 h = (out_dir + in_dir).normalized();
-
-    float n_dot_h = std::max(dot(normal, h), 0.0f);
-    float n_dot_h_squared = n_dot_h * n_dot_h;
-
-    float denominator = (float) M_PI * ((n_dot_h_squared * (a * a - 1.0f) + 1.0f) *
-                                        (n_dot_h_squared * (a * a - 1.0f) + 1));
-
-    if (denominator == 0.0f) denominator = 1e-6f;
-
-    float normal_distribution = (a * a) / denominator;
-
-    //Beckmann normal distribution
-//    float angle = acos(n_dot_h);
-//    float nom = exp( -(tan(angle) * tan(angle)) / (roughness * roughness) );
-//    float denom = M_PI * (roughness * roughness) * pow(cos(angle), 4);
-//    if(denom == 0)
-//        denom = 1e-6f;
-//
-//    if(nom == 0)
-//        nom = 1e-6f;
-//    float normal_distribution = nom / denom;
-    //--------------------------------------------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------------------------------------------
-    /**
-     * Geometric Shadowing function Cook-Torrance version.
-     */
-    float n_dot_v = dot(normal, out_dir);
-    float n_dot_l = dot(normal, in_dir);
-
-    /**
-     * if the incoming and outgoing direction are beneath the surface we can't have light transport.
-     */
-    if (n_dot_v <= 0.0f || n_dot_l <= 0.0f)
-        return 0.0f;
-
-    float v_dot_h = std::max(dot(out_dir, h), 1e-6f);
-
-    float term_a = (2.0f * n_dot_h * n_dot_v) / v_dot_h;
-    float term_b = (2.0f * n_dot_h * n_dot_l) / v_dot_h;
-
-    float geometric_shadowing = std::min(std::min(1.0f, term_a), term_b);
-
-    //--------------------------------------------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------------------------------------------
-    /**
-     * Fresnel term Schlick approximation
-     */
-
-    float reflectivity = 1.0f - material.roughness;
-    float fresnel = reflectivity + (1.0f - reflectivity) * (float) pow(1.0f - (v_dot_h), 5.0f);
-
-    //--------------------------------------------------------------------------------------------------------------
-
-    float res = (normal_distribution * fresnel * geometric_shadowing) / (4.0f * n_dot_l * n_dot_v);
-
-    return res;
-}
-
 RayTracer::~RayTracer()
 {
     delete scene;
@@ -190,12 +111,9 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
         Vec3 light_direction = light->get_position() - hit_point.position;
         light_direction.normalize();
 
-        /**
-         * Lambertian diffuse.
-         */
-        float diff_light = std::max(dot(light_direction, hit_point.normal), 0.0f);
+        float diff_light = shader.calculate_diffuse_contribution(light_direction, view_direction, hit_point, material);
 
-        float f_reflective = eval_brdf(hit_point.normal, light_direction, view_direction, material);
+        float f_reflective = shader.calculate_specular_contribution(hit_point.normal, light_direction, view_direction, material);
 
         Vec3 col = ((material.albedo * diff_light) / M_PI) * material.roughness;
         col = material.metallic ? col + material.albedo * f_reflective : col + Vec3(1.0, 1.0, 1.0) * f_reflective;
@@ -208,7 +126,7 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
     if (reflectivity > 0.0001) {
 
         Vec3 refl_dir = reflect(ray.direction, hit_point.normal);
-        float brdf = eval_brdf(hit_point.normal, refl_dir.normalized(), view_direction, material);
+        float brdf = shader.calculate_specular_contribution(hit_point.normal, refl_dir.normalized(), view_direction, material);
 
         //TODO: Move this in the brdf eval and use radiometric or photometric lights.
         reflectivity *= brdf > 1.0f ? 1.0f : brdf;

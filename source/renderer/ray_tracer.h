@@ -6,6 +6,7 @@
 #include <functional>
 #include <thread_pool.h>
 #include "renderer.h"
+#include "shader.h"
 
 class RayTracer : public Renderer {
 protected:
@@ -16,6 +17,8 @@ protected:
     std::vector< std::function<void()> > render_jobs;
 
     ThreadPool thread_pool;
+
+    Shader shader;
 
     static const int max_iterations = 100;
 
