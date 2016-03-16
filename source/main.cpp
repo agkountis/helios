@@ -28,12 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char **argv)
 {
-    Drawable *sphere = new Sphere(Vec3(2.0, 0.0f, 0.0f), 0.3);
+    Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 0.0f), 0.3);
     sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
-    sphere->material.roughness = 0.3;
-    sphere->material.metallic = true;
+    sphere->material.roughness = 1.0f;
+    sphere->material.metallic = false;
+    sphere->material.shading_model.diffuse_function = OREN_NYAR;
 
-    Drawable *sphere2 = new Sphere(Vec3(1.5f, -0.0f, 0.0f), 0.1);
+    Drawable *sphere2 = new Sphere(Vec3(1.5f, -0.0f, 0.0f), 0.3);
     sphere2->material.albedo = Vec3(1.000, 0.0f, 0.0);
     sphere2->material.roughness = 0.999f;
     sphere2->material.metallic = false;
@@ -69,18 +70,18 @@ int main(int argc, char **argv)
     plane_f->material.metallic = false;
 
     Camera camera;
-    camera.set_position(Vec3(-0.1f, 0.0f, -1.0f));
-    camera.set_target(Vec3(2.0, 0.0f, 0));
+    camera.set_position(Vec3(0.0f, 0.0f, -1.0f));
+    camera.set_target(Vec3(0.0, 0.0f, 0));
     camera.set_fov(50.0f, Camera::CAM_FOV_DEGREES);
 
     Scene *scene = new Scene;
 
     //Utils::generate_sphere_flake(scene, sphere->material, Vec3(0, 0.4, 0), 0.3, 0.4, 4);
     scene->add_drawable(sphere);
-    scene->add_drawable(sphere2);
+//    scene->add_drawable(sphere2);
     scene->add_drawable(plane_d);
     scene->add_drawable(plane_b);
-//    //scene->add_drawable(plane_u);
+    //scene->add_drawable(plane_u);
     scene->add_drawable(plane_l);
     scene->add_drawable(plane_r);
 //    scene->add_drawable(plane_f);
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
 
     lt = new Light;
     lt->set_color(Vec3(1.0f, 1.0f, 1.0f));
-    lt->set_position(Vec3(3.0f, 2.0, -6.0f));
+    lt->set_position(Vec3(0.0f, 2.0, -6.0f));
 
     scene->add_light(lt);
 
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
     //scene->add_light(lt2);
 
     Image image;
-    image.create(7680, 4320);
+    image.create(1024, 768);
 
     Renderer *renderer = new RayTracer(scene, image);
 

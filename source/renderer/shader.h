@@ -42,6 +42,8 @@ private:
      */
     float diffuse_lambert(const Vec3 &light_direction, const Vec3 &normal) const;
 
+    float diffuse_oren_nayar(const Vec3 &light_direction, const Vec3 &view_direction, const HitPoint &hit_point) const;
+
     /**
      * NDF functions
      */

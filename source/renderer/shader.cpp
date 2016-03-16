@@ -24,12 +24,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <iostream>
+#include <math.h>
+#include <drawable.h>
+#include <algorithm>
 
 /* Private Functions ------------------------------------------------------------------------------ */
 
 float Shader::diffuse_lambert(const Vec3 &light_direction, const Vec3 &normal) const
 {
     return std::max(dot(light_direction, normal), 0.0f);
+}
+
+
+float Shader::diffuse_oren_nayar(const Vec3 &light_direction, const Vec3 &view_direction,
+                                 const HitPoint &hit_point) const
+{
+    Drawable *obj = static_cast<Drawable *>(hit_point.object);
+
+    float roughness = obj->material.roughness;
+
+    float roughness_squared = roughness * roughness;
+
+    float n_dot_l = dot(hit_point.normal, light_direction);
+    float n_dot_v = dot(hit_point.normal, view_direction);
+
+    float view_normal_angle = (float) acos(n_dot_v);
+    float light_normal_angle = (float) acos(n_dot_l);
+
+    float a = std::max(view_normal_angle, light_normal_angle);
+    float b = std::min(view_normal_angle, light_normal_angle);
+    float c = dot(view_direction - hit_point.normal * dot(view_direction, hit_point.normal),
+                  light_direction - hit_point.normal * dot(light_direction, hit_point.normal));
+
+    float A = 1.0f - 0.5f * (roughness_squared / (roughness_squared + 0.57f));
+
+    float B = 0.45f * (roughness_squared / (roughness_squared + 0.09f));
+
+    float C = (float) sin(a) * (float) tan(b);
+
+    return std::max(0.0f, n_dot_l) * (A + B * std::max(0.0f, c) * C);
 }
 
 float Shader::ndf_ggx(const ShadingVariables &variables) const
@@ -70,7 +103,7 @@ float Shader::calculate_diffuse_contribution(const Vec3 &light_direction, const 
         case LAMBERT:
             return diffuse_lambert(light_direction, hit_point.normal);
         case OREN_NYAR:
-            break;
+            return diffuse_oren_nayar(light_direction, view_direction, hit_point);
     }
 
     return 0;
