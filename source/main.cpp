@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int main(int argc, char **argv)
 {
     Drawable *sphere = new Sphere(Vec3(0.0, 0.0f, 0.0f), 0.3);
-    sphere->material.albedo = Vec3(1.000, 0.843f, 0.136);
+    sphere->material.albedo = Vec3(1.000, 0.0f, 0.0);
     sphere->material.roughness = 1.0f;
     sphere->material.metallic = false;
     sphere->material.shading_model.diffuse_function = OREN_NYAR;

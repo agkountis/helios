@@ -97,12 +97,12 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 {
     Vec3 color;
 
-    Material material = ((Drawable *) hit_point.object)->material;
+    Material material = static_cast<Drawable *>(hit_point.object)->material;
 
     Vec3 view_direction = -ray.direction;
     view_direction.normalize();
 
-    const std::vector<Light *> &lights = scene->get_lights();
+    auto lights = scene->get_lights();
 
     for (auto light : lights) {
 
@@ -131,9 +131,10 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
 
         float diff_light = shader.calculate_diffuse_contribution(light_direction, view_direction, hit_point, material);
 
-        float f_reflective = shader.calculate_specular_contribution(hit_point.normal, light_direction, view_direction, material);
+        float f_reflective = shader.calculate_specular_contribution(hit_point.normal, light_direction, view_direction,
+                                                                    material);
 
-        Vec3 col = ((material.albedo * diff_light) / M_PI) * material.roughness;
+        Vec3 col = ((material.albedo) * diff_light) ;
         col = material.metallic ? col + material.albedo * f_reflective : col + Vec3(1.0, 1.0, 1.0) * f_reflective;
 
         color = color + col * light->get_color();
@@ -144,7 +145,8 @@ Vec3 RayTracer::shade(const Ray &ray, HitPoint &hit_point, int iterations)
     if (reflectivity > 0.0001) {
 
         Vec3 refl_dir = reflect(ray.direction, hit_point.normal);
-        float brdf = shader.calculate_specular_contribution(hit_point.normal, refl_dir.normalized(), view_direction, material);
+        float brdf = shader.calculate_specular_contribution(hit_point.normal, refl_dir.normalized(), view_direction,
+                                                            material);
 
         //TODO: Move this in the brdf eval and use radiometric or photometric lights.
         reflectivity *= brdf > 1.0f ? 1.0f : brdf;

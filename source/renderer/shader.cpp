@@ -62,6 +62,7 @@ float Shader::diffuse_oren_nayar(const Vec3 &light_direction, const Vec3 &view_d
 
     float C = (float) sin(a) * (float) tan(b);
 
+
     return std::max(0.0f, n_dot_l) * (A + B * std::max(0.0f, c) * C);
 }
 
